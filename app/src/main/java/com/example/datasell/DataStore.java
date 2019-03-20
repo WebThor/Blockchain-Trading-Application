@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,9 +36,12 @@ import java.util.Date;
 
 public class DataStore extends AppCompatActivity {
     private Switch switchGPS;
-
+    private TextView gpsText;
+    private SeekBar gpsSpeed;
     private BroadcastReceiver broadcastReceiver;
-
+    private static final String LOGTAG = "GPS_LOG";
+    private int progress = 0;
+    private boolean isGPSLoggingActive = false;
 
     @Override
     protected void onResume() {
@@ -47,7 +51,7 @@ public class DataStore extends AppCompatActivity {
                 @Override
                 public void onReceive(Context context, Intent intent) {
 
-                    Log.i("GPS_LOG","\n" +intent.getExtras().get("coordinates"));
+                    Log.i(LOGTAG,"\n" +intent.getExtras().get("coordinates"));
 
                 }
             };
@@ -74,8 +78,48 @@ public class DataStore extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_store);
         switchGPS = findViewById(R.id.storeGPSSwitch);
+        gpsText = findViewById(R.id.gpsSpeedTextField);
+        gpsSpeed = findViewById(R.id.gpsSeekBar);
+
+        gpsText.setText("Log every: " + progress + " Seconds");
 
 
+        this.gpsSpeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            // When Progress value changed.
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progressValue, boolean fromUser) {
+                progress = progressValue;
+                gpsText.setText("Log every: " + progress + " Seconds");
+
+
+
+            }
+
+            // Notification that the user has started a touch gesture.
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                Log.i(LOGTAG, "Started tracking seekbar");
+
+                if(switchGPS.isChecked()){
+                    switchGPS.setChecked(false);
+                }
+
+
+
+            }
+
+            // Notification that the user has finished a touch gesture
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                gpsText.setText("Log every: " + progress + " Seconds");
+                Log.i(LOGTAG, "Stopped tracking seekbar");
+
+                if(!switchGPS.isChecked()){
+                    switchGPS.setChecked(true);
+                }
+
+            }
+        });
 
         if(!runtime_permissions())
             enable_buttons();
@@ -87,10 +131,10 @@ public class DataStore extends AppCompatActivity {
 
         switchGPS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isGPSLoggingActive = isChecked;
                 if (isChecked) {
-
                     Intent i = new Intent(getApplicationContext(), GPS_Service.class);
-                   // i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    i.putExtra("GPS_Frequence",progress);
                    startService(i);
                 }else{
                     Intent i = new Intent(getApplicationContext(),GPS_Service.class);

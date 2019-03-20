@@ -37,7 +37,6 @@ public class GPS_Service extends Service {
     public int onStartCommand(Intent intent, int flags, int startId){
         Intent notificationIntent = new Intent(this,DataStore.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
-        Log.i("GPS_LOG","onCommandGPS");
         Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
                 .setContentTitle("GPS_Service")
                 .setContentText("GPS is collected")
@@ -45,6 +44,9 @@ public class GPS_Service extends Service {
                 .setContentIntent(pendingIntent)
                 .build();
         startForeground(1,notification);
+        int progress = intent.getIntExtra("GPS_Frequence",3000);
+        Log.i("GPS_LOG","New frequence: " +String.valueOf(progress));
+        getLocation(progress * 1000);
         return START_NOT_STICKY;
     }
 
@@ -77,6 +79,11 @@ public class GPS_Service extends Service {
             }
         };
 
+
+    }
+
+
+    private void getLocation(int frequence){
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 
         //noinspection MissingPermission
@@ -90,7 +97,7 @@ public class GPS_Service extends Service {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 0, listener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, frequence, 0, listener);
 
     }
 
