@@ -13,6 +13,7 @@
         android:id="@+id/offerText"
         android:layout_width="191dp"
         android:layout_height="27dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:text="Data Offers"
         android:textColor="#000"
@@ -27,6 +28,7 @@
         android:id="@+id/requestText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:text="Data Requests"
         android:textColor="#000"
         app:layout_constraintBottom_toTopOf="@+id/requestView"
@@ -35,22 +37,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.927" />
-
-    <TextView
-        android:id="@+id/textID"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="84dp"
-        android:layout_marginLeft="84dp"
-        android:layout_marginTop="26dp"
-        android:layout_marginEnd="176dp"
-        android:layout_marginRight="176dp"
-        android:layout_marginBottom="24dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/requestView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/requestText"
-        app:layout_constraintTop_toBottomOf="@+id/offerView" />
 
     <ScrollView
         android:id="@+id/offerView"
@@ -95,20 +81,20 @@
 
     <Button
         android:id="@+id/refreshButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="43dp"
+        android:layout_height="37dp"
         android:layout_marginStart="52dp"
-        android:layout_marginLeft="52dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="29dp"
-        android:layout_marginRight="29dp"
         android:layout_marginBottom="3dp"
+        android:background="@drawable/ic_sync_black_24dp"
         android:onClick="getOffers"
-        android:text="Refresh"
         app:layout_constraintBottom_toTopOf="@+id/offerView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.674"
         app:layout_constraintStart_toEndOf="@+id/offerText"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </android.support.constraint.ConstraintLayout>

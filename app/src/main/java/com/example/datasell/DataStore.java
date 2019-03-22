@@ -1,37 +1,22 @@
 package com.example.datasell;
 
 import android.Manifest;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Handler;
-import android.os.PowerManager;
-import android.os.SystemClock;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.Calendar;
 import java.util.Date;
 
 public class DataStore extends AppCompatActivity {
@@ -41,7 +26,9 @@ public class DataStore extends AppCompatActivity {
     private BroadcastReceiver broadcastReceiver;
     private static final String LOGTAG = "GPS_LOG";
     private int progress = 0;
-    private boolean isGPSLoggingActive = false;
+    private SQLiteDatabaseHandlerGPS db;
+    private Date date;
+    private long ts ;
 
     @Override
     protected void onResume() {
@@ -50,8 +37,13 @@ public class DataStore extends AppCompatActivity {
             broadcastReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
+                    ts = date.getTime();
+                    String timestamp = String.valueOf(ts);
 
-                    Log.i(LOGTAG,"\n" +intent.getExtras().get("coordinates"));
+                    Log.i(LOGTAG,"\n" + timestamp + " "+intent.getExtras().get("GPS_longitude") + " " + intent.getExtras().get("GPS_latitude"));
+                    db.addGPSPosition(timestamp,intent.getExtras().get("GPS_longitude").toString(),intent.getExtras().get("GPS_latitude").toString());
+
+
 
                 }
             };
@@ -80,9 +72,9 @@ public class DataStore extends AppCompatActivity {
         switchGPS = findViewById(R.id.storeGPSSwitch);
         gpsText = findViewById(R.id.gpsSpeedTextField);
         gpsSpeed = findViewById(R.id.gpsSeekBar);
-
+        db = new SQLiteDatabaseHandlerGPS(this);
         gpsText.setText("Log every: " + progress + " Seconds");
-
+        date= new Date();
 
         this.gpsSpeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             // When Progress value changed.
@@ -131,7 +123,6 @@ public class DataStore extends AppCompatActivity {
 
         switchGPS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                isGPSLoggingActive = isChecked;
                 if (isChecked) {
                     Intent i = new Intent(getApplicationContext(), GPS_Service.class);
                     i.putExtra("GPS_Frequence",progress);
@@ -139,6 +130,7 @@ public class DataStore extends AppCompatActivity {
                 }else{
                     Intent i = new Intent(getApplicationContext(),GPS_Service.class);
                     stopService(i);
+                    Log.i(LOGTAG,db.allGPSPositionsInDateRange("1553126400","1553212800").toString());
                 }
             }
         });

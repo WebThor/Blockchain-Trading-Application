@@ -39,7 +39,7 @@ public class GPS_Service extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
         Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
                 .setContentTitle("GPS_Service")
-                .setContentText("GPS is collected")
+                .setContentText("GPS-Position gets collected")
                 .setSmallIcon(R.drawable.ic_online)
                 .setContentIntent(pendingIntent)
                 .build();
@@ -57,7 +57,8 @@ public class GPS_Service extends Service {
             @Override
             public void onLocationChanged(Location location) {
                 Intent i = new Intent("location_update");
-                i.putExtra("coordinates", location.getLongitude() + " " + location.getLatitude());
+                i.putExtra("GPS_longitude", location.getLongitude());
+                i.putExtra("GPS_latitude", location.getLatitude());
                 sendBroadcast(i);
             }
 

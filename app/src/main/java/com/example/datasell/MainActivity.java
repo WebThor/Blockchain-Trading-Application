@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity
 
         Log.i("connectionLog_URI",uri);
 
-        TextView textView = findViewById(R.id.textID);
 
 
 

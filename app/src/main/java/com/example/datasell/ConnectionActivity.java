@@ -31,6 +31,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class ConnectionActivity extends AppCompatActivity  {
     private TextView port;
     private View mProgressView;
     private View mLoginFormView;
+    private Spinner dropdownAddressbook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,15 @@ public class ConnectionActivity extends AppCompatActivity  {
         // Set up the connection form.
         ipAddress = (TextView) findViewById(R.id.ipAddress);
         port = (TextView) findViewById(R.id.port);
+        dropdownAddressbook = (Spinner) findViewById(R.id.deafultAddressbookDropdown);
+
+        List<String> list = new ArrayList<String>();
+        list.add("0x0000");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dropdownAddressbook.setAdapter(dataAdapter);
 
 
         Button connectionButton = (Button) findViewById(R.id.connectButton);
