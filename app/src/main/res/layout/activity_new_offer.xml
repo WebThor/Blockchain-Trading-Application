@@ -9,16 +9,16 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="53dp"
+        android:layout_height="50dp"
         android:theme="@style/AppTheme.AppBarOverlay"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.883"
         app:layout_constraintStart_toEndOf="@+id/scrollView2"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
+            android:id="@+id/totalDataValueField"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
@@ -26,7 +26,6 @@
             android:layout_marginEnd="279dp"
             android:layout_marginRight="279dp"
             android:layout_marginBottom="15dp"
-            android:text="Meta Data"
             app:layout_constraintBottom_toTopOf="@+id/scrollView2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -59,6 +58,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <Spinner
+                android:id="@+id/typeOfDataField"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:spinnerMode="dropdown" />
+
             <EditText
                 android:id="@+id/birthField"
                 android:layout_width="match_parent"
@@ -70,7 +75,7 @@
             <Spinner
                 android:id="@+id/genderField"
                 android:layout_width="match_parent"
-                android:layout_height="39dp"
+                android:layout_height="40dp"
                 android:spinnerMode="dropdown" />
 
             <EditText
@@ -80,6 +85,22 @@
                 android:ems="10"
                 android:hint="Highest Education Level"
                 android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/fromDateField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Start Date"
+                android:inputType="date" />
+
+            <EditText
+                android:id="@+id/toDateField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="End Date"
+                android:inputType="date" />
 
             <EditText
                 android:id="@+id/furtherMetaData"
@@ -98,18 +119,17 @@
                 android:inputType="date" />
 
             <Spinner
-                android:id="@+id/typeOfDataField"
+                android:id="@+id/riskSpinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
+                android:layout_height="40dp"
                 android:spinnerMode="dropdown" />
 
             <EditText
-                android:id="@+id/gatewayField"
+                android:id="@+id/gatekeeperField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Gateway Address"
+                android:hint="Gatekeeper Address"
                 android:inputType="textPersonName" />
 
         </LinearLayout>
@@ -120,75 +140,75 @@
         android:layout_width="328dp"
         android:layout_height="18dp"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginBottom="55dp"
         android:max="100"
         android:progress="0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
+        app:layout_constraintVertical_bias="0.191" />
 
     <TextView
         android:id="@+id/currentPrivacyValueField"
-        android:layout_width="200dp"
-        android:layout_height="18dp"
+        android:layout_width="170dp"
+        android:layout_height="30dp"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="165dp"
-        android:layout_marginRight="165dp"
         android:layout_marginBottom="10dp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/seekBarView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/priceField"
-        android:layout_width="143dp"
-        android:layout_height="wrap_content"
+        android:id="@+id/expectedPriceField"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="11dp"
-        android:layout_marginRight="11dp"
         android:layout_marginBottom="10dp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/seekBarView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toEndOf="@+id/currentPrivacyValueField"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/placeOfferButton"
         android:layout_width="132dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
-        android:layout_marginLeft="35dp"
-        android:layout_marginTop="65dp"
-        android:layout_marginEnd="33dp"
-        android:layout_marginRight="33dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="35dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/mybutton"
+        android:onClick="onPlaceOffer"
         android:text="Place Offer"
+        android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/placeplaceRequestButtonOfferButton2"
-        app:layout_constraintTop_toBottomOf="@+id/seekBarView"
-        android:background="@drawable/mybutton"/>
+        app:layout_constraintTop_toBottomOf="@+id/seekBarView" />
 
     <Button
         android:id="@+id/placeplaceRequestButtonOfferButton2"
         android:layout_width="132dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        android:layout_marginLeft="28dp"
-        android:layout_marginTop="65dp"
         android:layout_marginEnd="35dp"
-        android:layout_marginRight="35dp"
         android:layout_marginBottom="16dp"
-        android:text="Place Request"
         android:background="@drawable/mybutton"
+        android:text="Place Request"
+        android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/placeOfferButton"
         app:layout_constraintStart_toStartOf="parent"

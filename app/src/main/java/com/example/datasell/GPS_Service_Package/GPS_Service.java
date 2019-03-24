@@ -1,4 +1,4 @@
-package com.example.datasell;
+package com.example.datasell.GPS_Service_Package;
 
 import android.Manifest;
 import android.app.Notification;
@@ -18,7 +18,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import static com.example.datasell.App.CHANNEL_ID;
+import com.example.datasell.DataStore;
+import com.example.datasell.R;
+
+import static com.example.datasell.GPS_Service_Package.App.CHANNEL_ID;
 
 /**
  * Created by filipp on 6/16/2016.
@@ -35,7 +38,7 @@ public class GPS_Service extends Service {
     }
 
     public int onStartCommand(Intent intent, int flags, int startId){
-        Intent notificationIntent = new Intent(this,DataStore.class);
+        Intent notificationIntent = new Intent(this, DataStore.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
         Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
                 .setContentTitle("GPS_Service")

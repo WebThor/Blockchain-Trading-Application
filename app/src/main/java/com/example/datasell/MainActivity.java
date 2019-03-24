@@ -20,7 +20,6 @@ import java.util.List;
 
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Serializable {
@@ -68,12 +67,11 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    //public void refreshButton(View v){
-    //    db = new SQLiteDatabaseHandlerGPS(this);
-    //    User user = db.getUser(BlockchainManager.getADDRESSBOOK());
-    //   Log.i(MAIN_LOG,user.getAddress());
-    //   db.close();
-    //}
+    public void refreshButton(View v){
+        db = new SQLiteDatabaseHandlerGPS(this);
+        Log.i(MAIN_LOG,String.valueOf(db.hasGPSData()));
+       db.close();
+    }
 
     private void initBlockchainConnection(String uri){
         blockchainManager = new BlockchainManager(this);

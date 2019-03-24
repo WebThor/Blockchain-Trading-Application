@@ -17,6 +17,8 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.example.datasell.GPS_Service_Package.GPS_Service;
+
 import java.util.Date;
 
 public class DataStore extends AppCompatActivity {
@@ -29,6 +31,7 @@ public class DataStore extends AppCompatActivity {
     private SQLiteDatabaseHandlerGPS db;
     private Date date;
     private long ts ;
+
 
     @Override
     protected void onResume() {
@@ -115,7 +118,6 @@ public class DataStore extends AppCompatActivity {
 
         if(!runtime_permissions())
             enable_buttons();
-
     }
 
 
@@ -127,10 +129,13 @@ public class DataStore extends AppCompatActivity {
                     Intent i = new Intent(getApplicationContext(), GPS_Service.class);
                     i.putExtra("GPS_Frequence",progress);
                    startService(i);
+                    db.updateUserCollectings(BlockchainManager.getADDRESSBOOK(),1,0);
+                    Log.i(LOGTAG,String.valueOf(db.getUser(BlockchainManager.getADDRESSBOOK()).getIsGPSCollecting()));
                 }else{
                     Intent i = new Intent(getApplicationContext(),GPS_Service.class);
                     stopService(i);
-                   // Log.i(LOGTAG,db.allGPSPositionsInDateRange("1553126400","1553212800").toString());
+                    db.updateUserCollectings(BlockchainManager.getADDRESSBOOK(),0,0);
+                    Log.i(LOGTAG,String.valueOf(db.getUser(BlockchainManager.getADDRESSBOOK()).getIsGPSCollecting()));
                 }
             }
         });

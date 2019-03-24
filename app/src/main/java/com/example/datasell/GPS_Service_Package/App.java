@@ -1,4 +1,4 @@
-package com.example.datasell;
+package com.example.datasell.GPS_Service_Package;
 
 import android.app.Application;
 import android.app.NotificationChannel;

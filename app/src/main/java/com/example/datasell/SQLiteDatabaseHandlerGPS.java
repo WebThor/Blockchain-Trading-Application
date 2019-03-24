@@ -9,6 +9,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.datasell.GPS_Service_Package.GPSData;
+
 public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
 
 
@@ -91,6 +93,16 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
         return gpsPositions;
     }
 
+    public boolean hasGPSData(){
+        String query = "SELECT  * FROM " + TABLE_NAME_GPS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.moveToNext()){
+            return true;
+        }else {
+            return false;
+        }
+    }
 
 
     public void addGPSPosition(String timestamp,String longitude, String latitude ) {
@@ -106,6 +118,7 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
 
 
     public void addUser(String address){
+        address = tailorID(address);
         Cursor c = null;
         SQLiteDatabase db = this.getWritableDatabase();
         try {
@@ -126,18 +139,38 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
         }
     }
 
-    public User getUser(String address){
+    public void updateUserCollectings(String address, int gps, int apps){
+        address = tailorID(address);
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues newValues = new ContentValues();
+        newValues.put(KEY_ISGPSCOLLECTING, gps);
+        newValues.put(KEY_ISAPPSCOLLECTING, apps);
+        String[] args = new String[]{address};
+        db.update(TABLE_NAME_USER, newValues, "address=?", args);
+    }
 
+    public User getUser(String address){
+        address = tailorID(address);
         Cursor c = null;
         SQLiteDatabase db = this.getReadableDatabase();
-        //String query = "select * from USER_Table where address = ?";
-        String query = "select * from USER_Table";
-        c = db.rawQuery(query, new String[] {});
+        String query = "select * from USER_Table where address = ?";
+        c = db.rawQuery(query, new String[] {address});
         if (c.moveToFirst()) {
                return new User(c.getString(0),c.getInt(1),c.getInt(2));
 
         }else {
             return new User("",0,0);
+        }
+    }
+
+
+
+    private String tailorID(String address){
+        if (address.length() > 10)        {
+            return address.substring(address.length() - 10);
+        }
+        else        {
+            return address;
         }
     }
 
