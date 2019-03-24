@@ -52,6 +52,7 @@ public class ConnectionActivity extends AppCompatActivity  {
     private View mLoginFormView;
     private Spinner dropdownAddressbook;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +63,7 @@ public class ConnectionActivity extends AppCompatActivity  {
         dropdownAddressbook = (Spinner) findViewById(R.id.deafultAddressbookDropdown);
 
         List<String> list = new ArrayList<String>();
+        list.add("Choose default Addressbook");
         list.add("0x0000");
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,

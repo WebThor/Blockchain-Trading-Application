@@ -130,7 +130,7 @@ public class DataStore extends AppCompatActivity {
                 }else{
                     Intent i = new Intent(getApplicationContext(),GPS_Service.class);
                     stopService(i);
-                    Log.i(LOGTAG,db.allGPSPositionsInDateRange("1553126400","1553212800").toString());
+                   // Log.i(LOGTAG,db.allGPSPositionsInDateRange("1553126400","1553212800").toString());
                 }
             }
         });

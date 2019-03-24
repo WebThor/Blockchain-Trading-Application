@@ -19,6 +19,11 @@ import java.util.concurrent.ExecutionException;
 public class BlockchainManager {
     private final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
     private final static BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
+
+    public static String getADDRESSBOOK() {
+        return ADDRESSBOOK;
+    }
+
     private final static String ADDRESSBOOK = "0xde0ed64b8922be86361e5e2de9fa7ec265f196c8";
     private  Web3j web3;
     private Credentials creds;

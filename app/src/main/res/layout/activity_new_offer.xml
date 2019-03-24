@@ -174,7 +174,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/placeplaceRequestButtonOfferButton2"
-        app:layout_constraintTop_toBottomOf="@+id/seekBarView" />
+        app:layout_constraintTop_toBottomOf="@+id/seekBarView"
+        android:background="@drawable/mybutton"/>
 
     <Button
         android:id="@+id/placeplaceRequestButtonOfferButton2"
@@ -187,6 +188,7 @@
         android:layout_marginRight="35dp"
         android:layout_marginBottom="16dp"
         android:text="Place Request"
+        android:background="@drawable/mybutton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/placeOfferButton"
         app:layout_constraintStart_toStartOf="parent"

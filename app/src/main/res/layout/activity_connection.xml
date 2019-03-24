@@ -70,6 +70,7 @@
                 android:layout_height="wrap_content"
                 android:spinnerMode="dropdown" />
 
+
             <Button
                 android:id="@+id/connectButton"
                 style="?android:textAppearanceSmall"
@@ -78,7 +79,8 @@
                 android:layout_marginTop="16dp"
                 android:text="Connect"
                 android:textStyle="bold"
-                android:background="@drawable/mybutton" />
+                android:background="@drawable/mybutton"
+                android:textColor="#ffffff"/>
         </LinearLayout>
     </ScrollView>
 

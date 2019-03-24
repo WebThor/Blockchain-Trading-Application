@@ -25,12 +25,13 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Serializable {
 
+    private final String MAIN_LOG = "MAIN_LOG";
     private BlockchainManager blockchainManager;
+    private SQLiteDatabaseHandlerGPS db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_main2);
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -39,9 +40,6 @@ public class MainActivity extends AppCompatActivity
         String uri = (String) intent.getSerializableExtra("BlockchainURI");
 
         Log.i("connectionLog_URI",uri);
-
-
-
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -62,7 +60,20 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         initBlockchainConnection(uri);
+         db = new SQLiteDatabaseHandlerGPS(this);
+         db.addUser(BlockchainManager.getADDRESSBOOK());
+         Log.i(MAIN_LOG,"USER Added");
+         db.close();
+
+
     }
+
+    //public void refreshButton(View v){
+    //    db = new SQLiteDatabaseHandlerGPS(this);
+    //    User user = db.getUser(BlockchainManager.getADDRESSBOOK());
+    //   Log.i(MAIN_LOG,user.getAddress());
+    //   db.close();
+    //}
 
     private void initBlockchainConnection(String uri){
         blockchainManager = new BlockchainManager(this);
