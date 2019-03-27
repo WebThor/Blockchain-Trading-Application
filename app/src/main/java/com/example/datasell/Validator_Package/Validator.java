@@ -8,7 +8,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.regex.Pattern;
 
 public class Validator {
 
@@ -95,7 +94,7 @@ public class Validator {
     }
 
     public static boolean isDateOneBigger(String dateOne, String dateTwo){
-            if(isThisDateValid(dateOne,"dd.mm.yyyy") && isThisDateValid(dateTwo,"dd.mm.yyyy")){
+            if(isThisDateValid(dateOne,"dd.MM.yyyy") && isThisDateValid(dateTwo,"dd.MM.yyyy")){
                 SimpleDateFormat formatter1=new SimpleDateFormat("dd.MM.yyyy");
                 try {
                     Date date1=formatter1.parse(dateOne);
@@ -145,9 +144,9 @@ public class Validator {
     }
 
     public static boolean isOfferCorrect(String fromDate, String toDate, String validDate){
-        if(Validator.isThisDateValid(fromDate,"dd.mm.yyyy")
-        && Validator.isThisDateValid(toDate,"dd.mm.yyyy")
-        && Validator.isThisDateValid(validDate,"dd.mm.yyyy")
+        if(Validator.isThisDateValid(fromDate,"dd.MM.yyyy")
+        && Validator.isThisDateValid(toDate,"dd.MM.yyyy")
+        && Validator.isThisDateValid(validDate,"dd.MM.yyyy")
         && isDateOneBigger(validDate,toDate)){
             return true;
         }else{

@@ -23,9 +23,7 @@ import com.example.datasell.R;
 
 import static com.example.datasell.GPS_Service_Package.App.CHANNEL_ID;
 
-/**
- * Created by filipp on 6/16/2016.
- */
+
 public class GPS_Service extends Service {
 
     private LocationListener listener;
@@ -42,14 +40,13 @@ public class GPS_Service extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
         Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID)
                 .setContentTitle("GPS_Service")
-                .setContentText("GPS-Position gets collected")
+                .setContentText("Collecting GPS-Position")
                 .setSmallIcon(R.drawable.ic_online)
                 .setContentIntent(pendingIntent)
                 .build();
         startForeground(1,notification);
         int progress = intent.getIntExtra("GPS_Frequence",3000);
-        Log.i("GPS_LOG","New frequence: " +String.valueOf(progress));
-        getLocation(progress * 1000);
+        getLocation(300000);
         return START_NOT_STICKY;
     }
 

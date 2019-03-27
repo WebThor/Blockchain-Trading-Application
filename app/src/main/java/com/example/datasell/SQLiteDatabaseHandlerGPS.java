@@ -71,10 +71,52 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
-    public List<GPSData> allGPSPositionsInDateRange(String fromDateString, String toDateString) {
+    public List<GPSData> getAllGPSPositionsInDateRange(String fromDateString, String toDateString) {
 
         List<GPSData> gpsPositions = new LinkedList<GPSData>();
         String query = "SELECT  * FROM " + TABLE_NAME_GPS + " WHERE timestamp BETWEEN " + fromDateString + " AND " + toDateString ;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                GPSData gpsData = new GPSData();
+                gpsData.setTime(cursor.getString(1));
+                gpsData.setLongitude(cursor.getString(2));
+                gpsData.setLatitude(cursor.getString(3));
+
+                gpsPositions.add(gpsData);
+
+            } while (cursor.moveToNext());
+        }
+
+        return gpsPositions;
+    }
+
+    public List<GPSData> getAllGPSPositionsAfter(String fromDateString){
+        List<GPSData> gpsPositions = new LinkedList<GPSData>();
+        String query = "SELECT  * FROM " + TABLE_NAME_GPS + " WHERE timestamp > " + fromDateString ;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                GPSData gpsData = new GPSData();
+                gpsData.setTime(cursor.getString(1));
+                gpsData.setLongitude(cursor.getString(2));
+                gpsData.setLatitude(cursor.getString(3));
+
+                gpsPositions.add(gpsData);
+
+            } while (cursor.moveToNext());
+        }
+
+        return gpsPositions;
+    }
+
+    public List<GPSData> getAllGPSPositions(){
+        List<GPSData> gpsPositions = new LinkedList<GPSData>();
+        String query = "SELECT  * FROM " + TABLE_NAME_GPS;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 

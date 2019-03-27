@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
@@ -77,6 +78,8 @@ public class DataStore extends AppCompatActivity {
         gpsSpeed = findViewById(R.id.gpsSeekBar);
         db = new SQLiteDatabaseHandlerGPS(this);
         gpsText.setText("Log every: " + progress + " Seconds");
+        gpsText.setVisibility(View.INVISIBLE);
+        gpsSpeed.setVisibility(View.INVISIBLE);
         date= new Date();
 
         this.gpsSpeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

@@ -15,18 +15,32 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.Serializable;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.web3j.protocol.Web3j;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Serializable {
 
     private final String MAIN_LOG = "MAIN_LOG";
-    private BlockchainManager blockchainManager;
     private SQLiteDatabaseHandlerGPS db;
+    private Web3j web3j;
+    private String uri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +50,11 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        String uri = (String) intent.getSerializableExtra("BlockchainURI");
+        uri = (String) intent.getSerializableExtra("BlockchainURI");
 
         Log.i("connectionLog_URI",uri);
+
+
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -61,10 +77,7 @@ public class MainActivity extends AppCompatActivity
         initBlockchainConnection(uri);
          db = new SQLiteDatabaseHandlerGPS(this);
          db.addUser(BlockchainManager.getADDRESSBOOK());
-         Log.i(MAIN_LOG,"USER Added");
          db.close();
-
-
     }
 
     public void refreshButton(View v){
@@ -74,20 +87,25 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initBlockchainConnection(String uri){
-        blockchainManager = new BlockchainManager(this);
-        setOnline(blockchainManager.connectToEthereumTestnet(uri));
-        getOffers(findViewById(R.id.refreshButton));
+        web3j = BlockchainManager.connectToEthereumTestnet(uri);
+        if(web3j != null){
+            setOnline(true);
+            getOffers(findViewById(R.id.refreshButton));
+        }else {
+            setOnline(false);
+        }
+
     }
 
     public void getOffers(View view){
         LinearLayout ll = (LinearLayout) findViewById(R.id.offerLinearLayout);
-        List<String> addresses = blockchainManager.getAddressesFromAddressbook(blockchainManager.loadDefaultAddressbook());
+        List<String> addresses = BlockchainManager.getAddressesFromAddressbook(BlockchainManager.loadDefaultAddressbook(web3j,BlockchainManager.getCredentialsFromPrivateKey()));
         Log.i("blockchain_call",addresses.toString());
         for (String s : addresses){
             Button b = new Button(this);
             b.setText(s);
             ll.addView(b);
-        }
+       }
     }
 
 
@@ -143,6 +161,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_offer) {
             Intent intent = new Intent(this, NewOffer.class);
+            intent.putExtra("blockchainURI",uri);
             startActivity(intent);
         } else if (id == R.id.nav_request) {
             startActivity(new Intent(this,ConnectionActivity.class));
@@ -158,4 +177,7 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+
 }
