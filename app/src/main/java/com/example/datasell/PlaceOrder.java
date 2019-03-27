@@ -1,12 +1,22 @@
 package com.example.datasell;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.web3j.protocol.Web3j;
+
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,6 +36,10 @@ public class PlaceOrder extends AppCompatActivity {
     private TextView    gatekeeperField;
     private TextView   priceField;
     private TextView   estimatedPlacePrice;
+    private TextView   privacyValue;
+    private Button placOrderButton;
+    private Button placeRequestButton;
+
     private String dataType;
     private String age;
     private String gender;
@@ -38,6 +52,21 @@ public class PlaceOrder extends AppCompatActivity {
     private String totalPrice;
     private String estimatedPrice;
     private String exchangeRate;
+    private String privacyValueString;
+    private String anonymityConfig;
+
+    private String uri;
+    private Web3j web3j;
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, NewOffer.class);
+        intent.putExtra("blockchainURI",uri);
+        startActivity(intent);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +84,12 @@ public class PlaceOrder extends AppCompatActivity {
         gatekeeperField= (TextView) findViewById(R.id.gatekeeperField);
         priceField= (TextView) findViewById(R.id.priceField);
         estimatedPlacePrice = (TextView) findViewById(R.id.estimatedPlacePrice);
+        placOrderButton = (Button) findViewById(R.id.placeOfferOnBlockchainButton);
+        placeRequestButton = (Button) findViewById(R.id.placeplaceRequestButtonOfferButton2);
+        privacyValue = (TextView)findViewById(R.id.privacyValueString);
+
+        placOrderButton.setEnabled(false);
+        placeRequestButton.setEnabled(false);
 
         dataType = getIntent().getStringExtra("dataType");
         age = getAgeFromBirthYear(getIntent().getStringExtra("birthyear"));
@@ -68,6 +103,9 @@ public class PlaceOrder extends AppCompatActivity {
         totalPrice = getIntent().getStringExtra("totalPrice");
         estimatedPrice= getIntent().getStringExtra("estimatedTransactionCosts");
         exchangeRate= getIntent().getStringExtra("exchangeRate");
+        uri= getIntent().getStringExtra("blockchainURI");
+        privacyValueString  = getIntent().getStringExtra("privacyValue");
+        anonymityConfig  = getIntent().getStringExtra("anonymityValue");
 
         dataTypeField.setText("Sell / Buy: " + dataType );
         birthyearField.setText("Age: " + age );
@@ -77,9 +115,24 @@ public class PlaceOrder extends AppCompatActivity {
         stopField.setText("Sell Data To: " + endDate );
         valideField.setText("Offer Valid Until: " + validUntilDate );
         metadataField.setText("Further Information: " + metaData);
+        privacyValue.setText("Risk: "+ anonymityConfig+ " and Privacy Value: " + privacyValueString);
         gatekeeperField.setText("Your Gatekeeper: " + gatekeeper);
         priceField.setText("Total Price: (€) " + totalPrice);
         estimatedPlacePrice.setText("Offer Price ("+ exchangeRate + "/ETH) (€): " + estimatedPrice );
+        initButtons();
+    }
+
+
+    private boolean initButtons(){
+        web3j = BlockchainManager.connectToEthereumTestnet(uri);
+        if(web3j != null){
+            placOrderButton.setEnabled(true);
+            placeRequestButton.setEnabled(true);
+            return true;
+        }else{
+            Toast.makeText(this,"You are not connected to a Blockchain", Toast.LENGTH_SHORT);
+            return false;
+        }
 
     }
 
@@ -91,7 +144,37 @@ public class PlaceOrder extends AppCompatActivity {
     }
 
     public void onPlaceOffer(View v){
-
+        try {
+            // Here we convert Java Object to JSON
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("isOffer","true"); // Set the first name/pair
+            jsonObj.put("dataType",dataType); // Set the first name/pair
+            jsonObj.put("age",age); // Set the first name/pair
+            jsonObj.put("gender",gender); // Set the first name/pair
+            jsonObj.put("education",education); // Set the first name/pair
+            jsonObj.put("startDate",startDate); // Set the first name/pair
+            jsonObj.put("endDate",endDate); // Set the first name/pair
+            jsonObj.put("validUntilDate",validUntilDate); // Set the first name/pair
+            jsonObj.put("metaData",metaData); // Set the first name/pair
+            jsonObj.put("anonymity",anonymityConfig); // Set the first name/pair
+            jsonObj.put("privacyValue",privacyValueString); // Set the first name/pair
+            jsonObj.put("gatekeeper",gatekeeper); // Set the first name/pair
+            double priceDouble = Double.parseDouble(totalPrice);
+            double exchange = Double.parseDouble(exchangeRate);
+            double value = priceDouble / exchange;
+            double wei =  Math.floor(value * 1000000000);
+            wei = wei * 1000000000;
+            Log.i("JSON",String.valueOf(wei));
+            Log.i("JSON",jsonObj.toString());
+            String address = BlockchainManager.deployDeal(web3j,BlockchainManager.getCredentialsFromPrivateKey(),BlockchainManager.getADDRESSBOOK(),jsonObj.toString(), BigInteger.valueOf((long)wei));
+            Toast.makeText(getApplicationContext(),"Your Offer is at Block" + address,Toast.LENGTH_LONG);
+            Log.i("JSON",address);
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+        catch(JSONException ex) {
+            ex.printStackTrace();
+        }
     }
     public void onPlaceRequest(View v){
 

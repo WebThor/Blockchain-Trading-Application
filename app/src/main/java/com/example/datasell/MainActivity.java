@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity
         Log.i("connectionLog_URI",uri);
 
 
-
+        getOffers();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -101,11 +101,24 @@ public class MainActivity extends AppCompatActivity
         LinearLayout ll = (LinearLayout) findViewById(R.id.offerLinearLayout);
         List<String> addresses = BlockchainManager.getAddressesFromAddressbook(BlockchainManager.loadDefaultAddressbook(web3j,BlockchainManager.getCredentialsFromPrivateKey()));
         Log.i("blockchain_call",addresses.toString());
+        ll.removeAllViews();
         for (String s : addresses){
             Button b = new Button(this);
             b.setText(s);
             ll.addView(b);
        }
+    }
+
+    public void getOffers(){
+        LinearLayout ll = (LinearLayout) findViewById(R.id.offerLinearLayout);
+        List<String> addresses = BlockchainManager.getAddressesFromAddressbook(BlockchainManager.loadDefaultAddressbook(web3j,BlockchainManager.getCredentialsFromPrivateKey()));
+        Log.i("blockchain_call",addresses.toString());
+        ll.removeAllViews();
+        for (String s : addresses){
+            Button b = new Button(this);
+            b.setText(s);
+            ll.addView(b);
+        }
     }
 
 

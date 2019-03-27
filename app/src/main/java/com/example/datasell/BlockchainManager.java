@@ -22,8 +22,7 @@ import java.util.concurrent.ExecutionException;
 public  class BlockchainManager  {
     protected final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
     protected final static BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
-    protected final static String TEST_ADDRESS = "0x04F50Bfa2716CA33bF683f3b8be186C9Da2e35B9";
-    private final static String ADDRESSBOOK = "0xde0ed64b8922be86361e5e2de9fa7ec265f196c8";
+    private final static String ADDRESSBOOK = "0xdF83faa4c680410964FFB03272a5A8D6f7F8b8BE";
 
     public static String getADDRESSBOOK() {
         return ADDRESSBOOK;
@@ -33,7 +32,7 @@ public  class BlockchainManager  {
 
 
     protected static  Credentials getCredentialsFromPrivateKey(){
-        return Credentials.create("02a792551c350f083805f687f8a21776bbfd4d2b9c73ae3df73a38db41431511");
+        return Credentials.create("045578bccaa6ebd1112dcaae933d8b00c45551707b9b344c876cb0d198cf85c5");
     }
 
     protected static Web3j connectToEthereumTestnet(String url){
@@ -91,12 +90,10 @@ public  class BlockchainManager  {
 
 
 
-    protected static String deployDeal(Web3j web3,Credentials creds, String addressBook,Boolean _isOffer,
-                                       String _metaData, String _ageGroup,String  _gender,String _education,
-                                       BigInteger _duration, BigInteger _price, String  _typeOfData, String  _gateKeeper){
+    protected static String deployDeal(Web3j web3,Credentials creds, String addressBook, String  data, BigInteger price){
         try {
-            BigInteger i =  BigInteger.valueOf(0L);
-            return Deal.deploy(web3,creds, GAS_PRICE,GAS_LIMIT,i,addressBook,_isOffer,_metaData,_ageGroup,_gender,_education,_duration,_price,_typeOfData,_gateKeeper).sendAsync().get().getContractAddress();
+            BigInteger initialWei = BigInteger.valueOf(0L);
+            return Deal.deploy(web3,creds, GAS_PRICE,GAS_LIMIT,initialWei,addressBook,data,price).sendAsync().get().getContractAddress();
         }catch (InterruptedException e){
             Log.i("ErrorLog",e.getMessage());
         }catch(ExecutionException e){

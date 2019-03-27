@@ -68,9 +68,11 @@ public class NewOffer extends AppCompatActivity {
     private TextView gateKeeper;
     private SQLiteDatabaseHandlerGPS db;
     private String totalPrice;
+
     private Calendar myCalendar;
     private Web3j web3j;
     private double currentETHRate = 120;
+    private String uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +104,7 @@ public class NewOffer extends AppCompatActivity {
         fromData.setKeyListener(null);
         toDate.setKeyListener(null);
         offerValidUntil.setKeyListener(null);
+        uri = getIntent().getStringExtra("blockchainURI");
 
 
         RequestQueue ExampleRequestQueue = Volley.newRequestQueue(this);
@@ -289,7 +292,7 @@ public class NewOffer extends AppCompatActivity {
 
 
     public void onClickNext(View v){
-        web3j = BlockchainManager.connectToEthereumTestnet(getIntent().getStringExtra("blockchainURI"));
+        web3j = BlockchainManager.connectToEthereumTestnet(uri);
         if(Validator.verifyAgeField(birthDayField)
         && Validator.verifyGender(genderSpinner)
         && Validator.isThisDateValid(fromData.getText().toString(),"dd.mm.yyyy")
@@ -314,6 +317,9 @@ public class NewOffer extends AppCompatActivity {
                 double est = currentETHRate * 0.003;
                 intent.putExtra("estimatedTransactionCosts", String.valueOf(est));
                 intent.putExtra("exchangeRate",String.valueOf(currentETHRate));
+                intent.putExtra("blockchainURI",uri);
+                intent.putExtra("privacyValue",String.valueOf(seekBar.getMax()-privacyValue));
+                intent.putExtra("anonymityValue",riskSpinner.getSelectedItem().toString());
                 startActivity(intent);
                 setContentView(R.layout.activity_place_order);
             }else{
