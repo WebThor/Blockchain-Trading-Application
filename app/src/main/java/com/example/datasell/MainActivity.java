@@ -1,7 +1,9 @@
 package com.example.datasell;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.RequiresPermission;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -22,16 +24,20 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
 
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.tuples.generated.Tuple3;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Serializable {
@@ -76,15 +82,9 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         initBlockchainConnection(uri);
          db = new SQLiteDatabaseHandlerGPS(this);
-         db.addUser(BlockchainManager.getADDRESSBOOK());
          db.close();
     }
 
-    public void refreshButton(View v){
-        db = new SQLiteDatabaseHandlerGPS(this);
-        Log.i(MAIN_LOG,String.valueOf(db.hasGPSData()));
-       db.close();
-    }
 
     private void initBlockchainConnection(String uri){
         web3j = BlockchainManager.connectToEthereumTestnet(uri);
@@ -99,14 +99,85 @@ public class MainActivity extends AppCompatActivity
 
     public void getOffers(View view){
         LinearLayout ll = (LinearLayout) findViewById(R.id.offerLinearLayout);
-        List<String> addresses = BlockchainManager.getAddressesFromAddressbook(BlockchainManager.loadDefaultAddressbook(web3j,BlockchainManager.getCredentialsFromPrivateKey()));
-        Log.i("blockchain_call",addresses.toString());
+        Credentials creds = BlockchainManager.getCredentialsFromPrivateKey();
+        List<String> addresses = BlockchainManager.getAddressesFromAddressbook(BlockchainManager.loadDefaultAddressbook(web3j,creds));
         ll.removeAllViews();
         for (String s : addresses){
-            Button b = new Button(this);
-            b.setText(s);
-            ll.addView(b);
-       }
+
+            try{
+                Deal deal = BlockchainManager.loadDeal(s,web3j,creds);
+                Button b = new Button(this);
+                Tuple3<String, String, BigInteger>  tupel = deal.returnContractDetails().sendAsync().get();
+                JSONObject data = new JSONObject(tupel.getValue2());
+                boolean isOffer = Boolean.parseBoolean(data.getString("isOffer"));
+                Log.i("LOG_TAG",String.valueOf(isOffer));
+                if(isOffer){
+                    String text = getInfoString(data);
+                    b.setText(text);
+                    if(isAnonymized(data.getString("anonymity"))){
+                        b.setBackgroundResource(R.drawable.buyanonymizedbutton);
+                    }else{
+                        b.setBackgroundResource(R.drawable.buybutton);
+                        b.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View view) {
+                                try {
+                                    Intent intent = new Intent(getApplicationContext(), DetailView.class);
+                                    intent.putExtra("isSellable","true");
+                                    intent.putExtra("dataType",data.getString("dataType"));
+                                    intent.putExtra("age",data.getString("age"));
+                                    intent.putExtra("gender",data.getString("gender"));
+                                    intent.putExtra("educationString",data.getString("education"));
+                                    intent.putExtra("startDataDate",data.getString("startDate"));
+                                    intent.putExtra("stopDataDate", data.getString("endDate"));
+                                    intent.putExtra("validUntil",data.getString("validUntilDate"));
+                                    intent.putExtra("metaDate",data.getString("metaData"));
+                                    intent.putExtra("gatekeeperIP",data.getString("gatekeeper"));
+                                    intent.putExtra("totalPrice",tupel.getValue3().toString());
+                                    intent.putExtra("privacyValue",data.getString("privacyValue"));
+                                    intent.putExtra("anonymityValue",data.getString("anonymity"));
+                                    startActivity(intent);
+                                }catch (Exception e){
+                                    Log.i("Error_LOG", e.getMessage());
+                                }
+                            }
+                        });
+                    }
+                    ll.addView(b);
+                }else{
+                    b.setText(data.getString("anonymity"));
+                    b.setBackgroundResource(R.drawable.sellbutton);
+                    b.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View view) {
+                            Log.i("Main_activity","clicked");
+                            Toast.makeText(getApplicationContext(),
+                                    "Button clicked index = " + s, Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    });
+                    ll.addView(b);
+                }
+            }catch (Exception e){
+                Log.i("LOG_TAG",e.getMessage());
+            }
+        }
+    }
+
+
+    public static  String getInfoString(JSONObject data){
+        String output = "";
+        try {
+            output = "Data: " + data.getString("dataType") + " | Valid Until: " +  data.getString("validUntilDate");
+        }catch (Exception e){
+            Log.i("Error_LOG",e.getMessage());
+        }
+        return output;
+    }
+    public static boolean isAnonymized(String s){
+        if(s == "Low-Risk, Low-Return"){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public void getOffers(){
@@ -117,6 +188,15 @@ public class MainActivity extends AppCompatActivity
         for (String s : addresses){
             Button b = new Button(this);
             b.setText(s);
+            b.setBackgroundResource(R.drawable.mybutton);
+            b.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    Log.i("Main_activity","clicked");
+                    Toast.makeText(getApplicationContext(),
+                            "Button clicked index = " + s, Toast.LENGTH_SHORT)
+                            .show();
+                }
+            });
             ll.addView(b);
         }
     }
@@ -177,9 +257,15 @@ public class MainActivity extends AppCompatActivity
             intent.putExtra("blockchainURI",uri);
             startActivity(intent);
         } else if (id == R.id.nav_request) {
+            Intent intent = new Intent(this, NewRequest.class);
+            intent.putExtra("blockchainURI",uri);
+            startActivity(intent);
+        } else if (id == R.id.nav_connection) {
             startActivity(new Intent(this,ConnectionActivity.class));
         } else if (id == R.id.nav_myOffers) {
-            startActivity(new Intent(this, MyOffers.class));
+            Intent intent = new Intent(this, MyOffers.class);
+            intent.putExtra("blockchainURI",uri);
+            startActivity(intent);
         } else if (id == R.id.nav_history) {
             startActivity(new Intent(this, History.class));
         } else if (id == R.id.nav_data) {

@@ -20,13 +20,13 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
 
     //GPS table and values
     private static final String TABLE_NAME_GPS = "GPS_Table";
-    private static final String KEY_ID = "id";
     private static final String KEY_TIMESTAMP = "timestamp";
     private static final String KEY_LONGITUDE = "longitude";
     private static final String KEY_LATITUDE = "latitude";
 
     //Offer table and values
     private static final String TABLE_NAME_OFFERS = "Offers_Table";
+    private static final String KEY_OWNERADDRESS = "ownerAddress";
 
     //User table and values
     private static final String TABLE_NAME_USER = "USER_Table";
@@ -51,9 +51,7 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
                 + "longitude TEXT, " + "latitude TEXT )";
 
         String CREATION_TABLE_OFFERS = "CREATE TABLE Offers_Table ( "
-                + "id INTEGER PRIMARY KEY AUTOINCREMENT, " +"ownerAddress TEXT," + "contractAddress TEXT, "
-                + "addressbookAddress TEXT ,"+ "isOffer INTEGER, " + "metaData TEXT, " + "ageGroup TEXT, " + "gender TEXT, " +"education TEXT, " + "fromDate TEXT, " + "toDate TEXT, "
-                + "price TEXT, " + "typeOfData TEXT, "+ "gateKeeper TEXT )";
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, " +"ownerAddress TEXT)";
 
         String CREATION_TABLE_USER = "CREATE TABLE USER_Table ( "
                 + "address TEXT PRIMARY KEY, "
@@ -156,6 +154,32 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
         // insert
         db.insert(TABLE_NAME_GPS,null, values);
         db.close();
+    }
+
+    public void addOffer(String address ) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_OWNERADDRESS,address);
+        // insert
+        db.insert(TABLE_NAME_OFFERS,null, values);
+        db.close();
+    }
+
+    public List<String> getAllOfferAddresses(){
+        List<String> offers = new LinkedList<String>();
+        String query = "SELECT  * FROM " + TABLE_NAME_OFFERS;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String offer = cursor.getString(1);
+                offers.add(offer);
+
+            } while (cursor.moveToNext());
+        }
+
+        return offers;
     }
 
 

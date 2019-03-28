@@ -6,39 +6,33 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.web3j.protocol.Web3j;
 
 import java.math.BigInteger;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 public class PlaceOrder extends AppCompatActivity {
 
-    private LinearLayout preview;
+
     private TextView dataTypeField;
-    private TextView  birthyearField;
-    private TextView   genderField;
-    private TextView   educationField;
-    private TextView   startField;
-    private TextView     stopField;
-    private TextView   valideField;
-    private TextView   metadataField;
-    private TextView    gatekeeperField;
-    private TextView   priceField;
-    private TextView   estimatedPlacePrice;
-    private TextView   privacyValue;
+    private TextView birthyearField;
+    private TextView genderField;
+    private TextView educationField;
+    private TextView startField;
+    private TextView stopField;
+    private TextView valideField;
+    private TextView metadataField;
+    private TextView gatekeeperField;
+    private TextView priceField;
+    private TextView estimatedPlacePrice;
+    private TextView privacyValue;
     private Button placOrderButton;
-    private Button placeRequestButton;
+    private SQLiteDatabaseHandlerGPS db;
+
 
     private String dataType;
     private String age;
@@ -72,7 +66,6 @@ public class PlaceOrder extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_order);
-        preview = (LinearLayout)findViewById(R.id.linearLayoutPreview);
         dataTypeField = (TextView) findViewById(R.id.dataTypeField);
         birthyearField= (TextView) findViewById(R.id.birthyearField);
         genderField= (TextView) findViewById(R.id.genderField);
@@ -85,11 +78,9 @@ public class PlaceOrder extends AppCompatActivity {
         priceField= (TextView) findViewById(R.id.priceField);
         estimatedPlacePrice = (TextView) findViewById(R.id.estimatedPlacePrice);
         placOrderButton = (Button) findViewById(R.id.placeOfferOnBlockchainButton);
-        placeRequestButton = (Button) findViewById(R.id.placeplaceRequestButtonOfferButton2);
         privacyValue = (TextView)findViewById(R.id.privacyValueString);
-
+        db = new SQLiteDatabaseHandlerGPS(this);
         placOrderButton.setEnabled(false);
-        placeRequestButton.setEnabled(false);
 
         dataType = getIntent().getStringExtra("dataType");
         age = getAgeFromBirthYear(getIntent().getStringExtra("birthyear"));
@@ -107,7 +98,7 @@ public class PlaceOrder extends AppCompatActivity {
         privacyValueString  = getIntent().getStringExtra("privacyValue");
         anonymityConfig  = getIntent().getStringExtra("anonymityValue");
 
-        dataTypeField.setText("Sell / Buy: " + dataType );
+        dataTypeField.setText("Sell: " + dataType );
         birthyearField.setText("Age: " + age );
         genderField.setText("Gender: "  + gender );
         educationField.setText("Education: " + education );
@@ -127,7 +118,6 @@ public class PlaceOrder extends AppCompatActivity {
         web3j = BlockchainManager.connectToEthereumTestnet(uri);
         if(web3j != null){
             placOrderButton.setEnabled(true);
-            placeRequestButton.setEnabled(true);
             return true;
         }else{
             Toast.makeText(this,"You are not connected to a Blockchain", Toast.LENGTH_SHORT);
@@ -167,8 +157,10 @@ public class PlaceOrder extends AppCompatActivity {
             Log.i("JSON",String.valueOf(wei));
             Log.i("JSON",jsonObj.toString());
             String address = BlockchainManager.deployDeal(web3j,BlockchainManager.getCredentialsFromPrivateKey(),BlockchainManager.getADDRESSBOOK(),jsonObj.toString(), BigInteger.valueOf((long)wei));
-            Toast.makeText(getApplicationContext(),"Your Offer is at Block" + address,Toast.LENGTH_LONG);
+            Toast.makeText(getApplicationContext(),"Your Offer is at Block" + address,Toast.LENGTH_LONG).show();
+            db.addOffer(address);
             Log.i("JSON",address);
+
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }

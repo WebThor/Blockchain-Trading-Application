@@ -102,4 +102,8 @@ public  class BlockchainManager  {
         return "";
     }
 
+    protected static Deal loadDeal(String address,Web3j web3,Credentials creds){
+        return Deal.load(address,web3,creds,GAS_PRICE,GAS_LIMIT);
+    }
+
 }

@@ -4,100 +4,94 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PlaceOrder">
+    tools:context=".DetailView">
 
     <LinearLayout
         android:id="@+id/linearLayoutPreview"
         android:layout_width="351dp"
-        android:layout_height="487dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="16dp"
+        android:layout_height="443dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="43dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/placeOfferOnBlockchainButton"
+        app:layout_constraintBottom_toTopOf="@+id/buyOfferButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
 
         <TextView
-            android:id="@+id/dataTypeField"
+            android:id="@+id/dataTypeFieldDetail"
             android:layout_width="match_parent"
             android:layout_height="40dp" />
 
         <TextView
-            android:id="@+id/birthyearField"
+            android:id="@+id/birthyearFieldDetail"
             android:layout_width="match_parent"
             android:layout_height="40dp" />
 
         <TextView
-            android:id="@+id/genderField"
+            android:id="@+id/genderFieldDetail"
             android:layout_width="match_parent"
             android:layout_height="40dp" />
 
         <TextView
-            android:id="@+id/educationField"
+            android:id="@+id/educationFieldDetail"
             android:layout_width="match_parent"
             android:layout_height="40dp" />
 
         <TextView
-            android:id="@+id/startField"
+            android:id="@+id/startFieldDetail"
             android:layout_width="match_parent"
             android:layout_height="40dp" />
 
         <TextView
-            android:id="@+id/stopField"
+            android:id="@+id/stopFieldDetail"
             android:layout_width="match_parent"
             android:layout_height="40dp" />
 
         <TextView
-            android:id="@+id/valideField"
+            android:id="@+id/valideFieldDetail"
             android:layout_width="match_parent"
             android:layout_height="40dp" />
 
         <TextView
-            android:id="@+id/metadataField"
+            android:id="@+id/metadataFieldDetail"
             android:layout_width="match_parent"
             android:layout_height="40dp" />
 
         <TextView
-            android:id="@+id/privacyValueString"
+            android:id="@+id/privacyValueStringDetail"
             android:layout_width="match_parent"
             android:layout_height="40dp" />
 
         <TextView
-            android:id="@+id/gatekeeperField"
+            android:id="@+id/gatekeeperFieldDetail"
             android:layout_width="match_parent"
             android:layout_height="40dp" />
 
         <TextView
-            android:id="@+id/priceField"
-            android:layout_width="match_parent"
-            android:layout_height="40dp" />
-
-        <TextView
-            android:id="@+id/estimatedPlacePrice"
+            android:id="@+id/priceFieldDetail"
             android:layout_width="match_parent"
             android:layout_height="40dp" />
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/placeOfferOnBlockchainButton"
+        android:id="@+id/buyOfferButton"
         android:layout_width="132dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginEnd="35dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="251dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="36dp"
         android:background="@drawable/mybutton"
-        android:onClick="onPlaceOffer"
-        android:text="Place Offer"
+        android:text="Buy Offer"
         android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBarView" />
-
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutPreview" />
 
 </android.support.constraint.ConstraintLayout>
