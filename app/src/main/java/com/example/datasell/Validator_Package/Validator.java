@@ -4,6 +4,8 @@ import android.util.Log;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -153,4 +155,9 @@ public class Validator {
             return false;
         }
     }
+
+    public static boolean isInputDecimal(String s){
+        return StringUtils.isNumeric(s);
+    }
+
 }

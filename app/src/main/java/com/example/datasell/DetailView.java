@@ -7,6 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.web3j.protocol.Web3j;
+
+import java.math.BigInteger;
+
 public class DetailView extends AppCompatActivity {
 
     private TextView dataTypeField;
@@ -20,10 +24,13 @@ public class DetailView extends AppCompatActivity {
     private TextView gatekeeperField;
     private TextView priceField;
     private TextView privacyValue;
+    private TextView amountField;
     private Button placOrderButton;
+    private Button solveRequestButton;
 
-    private String isSellableString;
+
     private boolean isSellable;
+    private String address;
     private String dataType;
     private String age;
     private String gender;
@@ -34,6 +41,8 @@ public class DetailView extends AppCompatActivity {
     private String metaData;
     private String gatekeeper;
     private String totalPrice;
+    private String uri;
+    private BigInteger weiPrice;
     private String privacyValueString;
     private String anonymityConfig;
 
@@ -54,11 +63,14 @@ public class DetailView extends AppCompatActivity {
         gatekeeperField= (TextView) findViewById(R.id.gatekeeperFieldDetail);
         priceField= (TextView) findViewById(R.id.priceFieldDetail);
         privacyValue= (TextView) findViewById(R.id.privacyValueStringDetail);
+        amountField = (TextView) findViewById(R.id.amountOfDataDetail);
+        amountField.setVisibility(View.GONE);
         placOrderButton= (Button) findViewById(R.id.buyOfferButton);
+        solveRequestButton= (Button) findViewById(R.id.solveRequestButton);
 
+        solveRequestButton.setVisibility(View.GONE);
 
-        isSellableString = getIntent().getStringExtra("isSellable");
-        isSellable = Boolean.parseBoolean(isSellableString);
+        isSellable = Boolean.parseBoolean(getIntent().getStringExtra("isSellable"));
         dataType = getIntent().getStringExtra("dataType");
         age = getIntent().getStringExtra("age");
         gender = getIntent().getStringExtra("gender");
@@ -69,8 +81,33 @@ public class DetailView extends AppCompatActivity {
         metaData= getIntent().getStringExtra("metaDate");
         gatekeeper = getIntent().getStringExtra("gatekeeperIP");
         totalPrice = getIntent().getStringExtra("totalPrice");
+        weiPrice = BigInteger.valueOf(Long.parseLong(totalPrice));
         privacyValueString  = getIntent().getStringExtra("privacyValue");
         anonymityConfig  = getIntent().getStringExtra("anonymityValue");
+        try {
+            address = getIntent().getStringExtra("address");
+        }catch (Exception e){
+
+        }
+        try {
+            uri = getIntent().getStringExtra("blockchainURI");
+        }catch (Exception e){
+
+        }
+
+        try {
+            String amountOfData = getIntent().getStringExtra("amountOfData");
+            String price = getIntent().getStringExtra("expectedPrice");
+            if(!amountOfData.equals("") && !price.equals("")){
+                amountField.setVisibility(View.VISIBLE);
+                amountField.setText("Amount of Data: "+amountOfData);
+                solveRequestButton.setVisibility(View.VISIBLE);
+                placOrderButton.setVisibility(View.GONE);
+            }
+        }catch (Exception e){
+            Log.i("Error_LOG", e.getMessage());
+        }
+
 
         double ether = Double.parseDouble(totalPrice) / 1000000000000000000L;
 
@@ -86,6 +123,7 @@ public class DetailView extends AppCompatActivity {
         gatekeeperField.setText("Gatekeeper: " + gatekeeper);
         priceField.setText("Total Price: (Ether) " + ether);
 
+
         if(isSellable){
             placOrderButton.setVisibility(View.VISIBLE);
         }else {
@@ -93,4 +131,26 @@ public class DetailView extends AppCompatActivity {
         }
 
     }
+
+    public void onBuyOffer(View v){
+        boolean success = false;
+        if(!uri.equals("") && !address.equals("")){
+            Web3j web3j = BlockchainManager.connectToEthereumTestnet(uri);
+            Deal deal = BlockchainManager.loadDeal(address,web3j,BlockchainManager.getBuyerCredentials());
+           success = BlockchainManager.buyOffer(deal,weiPrice);
+           try {
+               Log.i("LOG_TAG",deal.getBuyer().sendAsync().get());
+           }catch (Exception e){
+
+           }
+
+           //TODO continue here
+
+
+        }
+        if(success){
+            Log.i("LOG_TAG","success");
+        }
+    }
+
 }

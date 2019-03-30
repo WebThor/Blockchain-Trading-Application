@@ -8,13 +8,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.datasell.GPS_Service_Package.GPSData;
 
 public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
 
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     //DB values
     private static final String DATABASE_NAME = "DataSellerDB";
 
@@ -27,6 +28,10 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
     //Offer table and values
     private static final String TABLE_NAME_OFFERS = "Offers_Table";
     private static final String KEY_OWNERADDRESS = "ownerAddress";
+
+    //Request table value
+    private static final String TABLE_NAME_REQUEST= "Request_Table";
+
 
     //User table and values
     private static final String TABLE_NAME_USER = "USER_Table";
@@ -53,12 +58,16 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
         String CREATION_TABLE_OFFERS = "CREATE TABLE Offers_Table ( "
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT, " +"ownerAddress TEXT)";
 
+        String CREATION_TABLE_REQUESTS = "CREATE TABLE Request_Table ( "
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, " +"ownerAddress TEXT)";
+
         String CREATION_TABLE_USER = "CREATE TABLE USER_Table ( "
                 + "address TEXT PRIMARY KEY, "
                 + "isCollectingGPS INTEGER, " + "isCollectingApps INTEGER )";
 
         db.execSQL(CREATION_TABLE_GPS);
         db.execSQL(CREATION_TABLE_OFFERS);
+        db.execSQL(CREATION_TABLE_REQUESTS);
         db.execSQL(CREATION_TABLE_USER);
     }
 
@@ -66,11 +75,17 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // you can implement here migration process
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_GPS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_OFFERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_REQUEST);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_USER);
         this.onCreate(db);
     }
 
     public List<GPSData> getAllGPSPositionsInDateRange(String fromDateString, String toDateString) {
-
+        //Adjust different time zones
+        long to = Long.parseLong(toDateString);
+        to = to + 80000000;
+        toDateString = String.valueOf(to);
         List<GPSData> gpsPositions = new LinkedList<GPSData>();
         String query = "SELECT  * FROM " + TABLE_NAME_GPS + " WHERE timestamp BETWEEN " + fromDateString + " AND " + toDateString ;
         SQLiteDatabase db = this.getWritableDatabase();
@@ -165,6 +180,8 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
         db.close();
     }
 
+
+
     public List<String> getAllOfferAddresses(){
         List<String> offers = new LinkedList<String>();
         String query = "SELECT  * FROM " + TABLE_NAME_OFFERS;
@@ -181,6 +198,35 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
 
         return offers;
     }
+
+
+    public void addRequest(String address ) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_OWNERADDRESS,address);
+        // insert
+        db.insert(TABLE_NAME_REQUEST,null, values);
+        db.close();
+    }
+
+
+    public List<String> getAllRequestAddresses(){
+        List<String> request = new LinkedList<String>();
+        String query = "SELECT  * FROM " + "Request_Table";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String offer = cursor.getString(1);
+                request.add(offer);
+
+            } while (cursor.moveToNext());
+        }
+
+        return request;
+    }
+
 
 
     public void addUser(String address){

@@ -84,6 +84,19 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/placeRequestOnBlockchainButton"
+        android:layout_width="132dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/mybutton"
+        android:onClick="onPlaceRequest"
+        android:text="Place Request"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <Button
         android:id="@+id/placeOfferOnBlockchainButton"
         android:layout_width="132dp"
         android:layout_height="wrap_content"
@@ -95,8 +108,7 @@
         android:text="Place Offer"
         android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seekBarView" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
 

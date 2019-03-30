@@ -11,6 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +30,7 @@ public class ConnectionActivity extends AppCompatActivity  {
     private TextView port;
     private View mProgressView;
     private View mLoginFormView;
-    private Spinner dropdownAddressbook;
+    private MaterialBetterSpinner dropdownAddressbook;
 
 
     @Override
@@ -37,15 +40,13 @@ public class ConnectionActivity extends AppCompatActivity  {
         // Set up the connection form.
         ipAddress = (TextView) findViewById(R.id.ipAddress);
         port = (TextView) findViewById(R.id.port);
-        dropdownAddressbook = (Spinner) findViewById(R.id.deafultAddressbookDropdown);
+        dropdownAddressbook = (MaterialBetterSpinner) findViewById(R.id.deafultAddressbookDropdown);
 
         List<String> list = new ArrayList<String>();
-        list.add("Choose a default Addressbook:");
         list.add("0xdF83faa4c680410964FFB03272a5A8D6f7F8b8BE");
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropdownAddressbook.setAdapter(dataAdapter);
 
 
@@ -99,7 +100,7 @@ public class ConnectionActivity extends AppCompatActivity  {
             String uri = ip + ":" + portValue;
             Log.i("connectionLog_BM",uri);
             Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("BlockchainURI", uri);
+            intent.putExtra("blockchainURI", uri);
             startActivity(intent);
 
         }

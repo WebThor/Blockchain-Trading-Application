@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
 public  class BlockchainManager  {
     protected final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
     protected final static BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
-    private final static String ADDRESSBOOK = "0xdF83faa4c680410964FFB03272a5A8D6f7F8b8BE";
+    private final static String ADDRESSBOOK = "0x4e9c9cfe1b3982714de6bb34fdd0353b99921aa6";
 
     public static String getADDRESSBOOK() {
         return ADDRESSBOOK;
@@ -32,7 +32,11 @@ public  class BlockchainManager  {
 
 
     protected static  Credentials getCredentialsFromPrivateKey(){
-        return Credentials.create("045578bccaa6ebd1112dcaae933d8b00c45551707b9b344c876cb0d198cf85c5");
+        return Credentials.create("ea0b514ab66b89ba6877ea27f3e56d9d33f4b4951cb4930f07edb13933f569d0");
+    }
+
+    protected static Credentials getBuyerCredentials(){
+        return Credentials.create("6c540fdecca7b39c74b2aab1b5c8fd0e476b6227c60bd4572d21e0f930809d4d");
     }
 
     protected static Web3j connectToEthereumTestnet(String url){
@@ -88,6 +92,39 @@ public  class BlockchainManager  {
         return list;
     }
 
+    protected static String getBuyerOfContract(Deal deal){
+        String buyer = "0x0000000000000000000000000000000000000000";
+        try {
+            buyer = deal.getBuyer().sendAsync().get();
+        }catch (Exception e){
+            Log.i("ErrorLog",e.getMessage());
+        }
+        return buyer;
+    }
+
+    protected static boolean destroyContract(Deal deal){
+        try {
+            deal._destroyContract(BigInteger.ZERO).sendAsync().get();
+            return true;
+        }catch (Exception e){
+            Log.i("ErrorLog",e.getMessage());
+        }
+        return false;
+    }
+
+    protected static boolean buyOffer(Deal deal, BigInteger value){
+        try {
+            BigInteger price = deal.returnContractDetails().sendAsync().get().getValue3();
+            if(Double.parseDouble(String.valueOf(value)) >= Double.parseDouble(String.valueOf(price))){
+                deal.sendSafepay(value).sendAsync().get();
+                return true;
+            }
+            return false;
+        }catch (Exception e){
+            Log.i("ErrorLog",e.getMessage());
+        }
+        return false;
+    }
 
 
     protected static String deployDeal(Web3j web3,Credentials creds, String addressBook, String  data, BigInteger price){

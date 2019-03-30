@@ -15,7 +15,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.datasell.GPS_Service_Package.GPSData;
 import com.example.datasell.Validator_Package.Validator;
 
@@ -23,10 +22,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 
 import com.android.volley.Request;
@@ -39,9 +36,6 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.web3j.protocol.Web3j;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class NewOffer extends AppCompatActivity {
@@ -78,7 +72,7 @@ public class NewOffer extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_offer);
-        seekBar = (SeekBar) findViewById(R.id.seekBarView );
+        seekBar = (SeekBar) findViewById(R.id.seekBarView);
         privacyTextView = (TextView) findViewById(R.id.currentPrivacyValueField);
         expectedPriceField = (TextView) findViewById(R.id.expectedPriceField);
         genderSpinner = (Spinner) findViewById(R.id.genderField);
@@ -304,6 +298,7 @@ public class NewOffer extends AppCompatActivity {
             if(web3j != null){
 
                 Intent intent = new Intent(this, PlaceOrder.class);
+                intent.putExtra("isOffer","true");
                 intent.putExtra("dataType",typeOfData.getSelectedItem().toString());
                 intent.putExtra("birthyear",birthDayField.getText().toString());
                 intent.putExtra("gender",genderSpinner.getSelectedItem().toString());

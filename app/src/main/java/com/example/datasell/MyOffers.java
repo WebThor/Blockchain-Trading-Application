@@ -22,25 +22,28 @@ public class MyOffers extends AppCompatActivity {
     private SQLiteDatabaseHandlerGPS db;
     private Web3j web3j;
     private String uri;
-    private List<String> myOffers;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_offers);
         db = new SQLiteDatabaseHandlerGPS(this);
-        myOffers = db.getAllOfferAddresses();
+         List<String> myOffers = db.getAllOfferAddresses();
+         List<String> myRequests = db.getAllRequestAddresses();
+         for(String s : myRequests){
+             myOffers.add(s);
+         }
         db.close();
         uri = getIntent().getStringExtra("blockchainURI");
         Log.i("MyOffer_LOG",uri);
         web3j = BlockchainManager.connectToEthereumTestnet(uri);
-        getOffers();
+        getOffers(myOffers);
     }
 
-    public void getOffers(){
+    public void getOffers(List<String> addresses){
         LinearLayout ll = (LinearLayout) findViewById(R.id.myOffersLinearLayout);
         Credentials creds = BlockchainManager.getCredentialsFromPrivateKey();
-        List<String> addresses = myOffers;
         ll.removeAllViews();
         for (String s : addresses){
 
@@ -56,6 +59,29 @@ public class MyOffers extends AppCompatActivity {
                     b.setText(text);
                     if(MainActivity.isAnonymized(data.getString("anonymity"))){
                         b.setBackgroundResource(R.drawable.buyanonymizedbutton);
+                        b.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View view) {
+                                try {
+                                    Intent intent = new Intent(getApplicationContext(), DetailView.class);
+                                    intent.putExtra("isSellable","false");
+                                    intent.putExtra("dataType",data.getString("dataType"));
+                                    intent.putExtra("age","");
+                                    intent.putExtra("gender","");
+                                    intent.putExtra("educationString","");
+                                    intent.putExtra("startDataDate",data.getString("startDate"));
+                                    intent.putExtra("stopDataDate", data.getString("endDate"));
+                                    intent.putExtra("validUntil",data.getString("validUntilDate"));
+                                    intent.putExtra("metaDate",data.getString("metaData"));
+                                    intent.putExtra("gatekeeperIP",data.getString("gatekeeper"));
+                                    intent.putExtra("totalPrice",tupel.getValue3().toString());
+                                    intent.putExtra("privacyValue",data.getString("privacyValue"));
+                                    intent.putExtra("anonymityValue",data.getString("anonymity"));
+                                    startActivity(intent);
+                                }catch (Exception e){
+                                    Log.i("Error_LOG", e.getMessage());
+                                }
+                            }
+                        });
                     }else{
                         b.setBackgroundResource(R.drawable.buybutton);
                         b.setOnClickListener(new View.OnClickListener() {
@@ -83,17 +109,64 @@ public class MyOffers extends AppCompatActivity {
                         });
                     }
                     ll.addView(b);
+                    //If is Request
                 }else{
-                    b.setText(data.getString("anonymity"));
-                    b.setBackgroundResource(R.drawable.sellbutton);
-                    b.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View view) {
-                            Log.i("Main_activity","clicked");
-                            Toast.makeText(getApplicationContext(),
-                                    "Button clicked index = " + s, Toast.LENGTH_SHORT)
-                                    .show();
-                        }
-                    });
+                    String text = MainActivity.getInfoString(data);
+                    b.setText(text);
+                    if(MainActivity.isAnonymized(data.getString("anonymity"))){
+                        b.setBackgroundResource(R.drawable.sellanonymizedbutton);
+                        b.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View view) {
+                                try {
+                                    Intent intent = new Intent(getApplicationContext(), DetailView.class);
+                                    intent.putExtra("isSellable","false");
+                                    intent.putExtra("dataType",data.getString("dataType"));
+                                    intent.putExtra("age","");
+                                    intent.putExtra("gender","");
+                                    intent.putExtra("educationString","");
+                                    intent.putExtra("startDataDate",data.getString("startDate"));
+                                    intent.putExtra("stopDataDate", data.getString("endDate"));
+                                    intent.putExtra("validUntil",data.getString("validUntilDate"));
+                                    intent.putExtra("amountOfData",data.getString("amountOfData"));
+                                    intent.putExtra("metaDate",data.getString("metaData"));
+                                    intent.putExtra("gatekeeperIP",data.getString("gatekeeper"));
+                                    intent.putExtra("expectedPrice",data.getString("expectedPrice"));
+                                    intent.putExtra("totalPrice",tupel.getValue3().toString());
+                                    intent.putExtra("privacyValue",data.getString("privacyValue"));
+                                    intent.putExtra("anonymityValue",data.getString("anonymity"));
+                                    startActivity(intent);
+                                }catch (Exception e){
+                                    Log.i("Error_LOG", e.getMessage());
+                                }
+                            }
+                        });
+                    }else{
+                        b.setBackgroundResource(R.drawable.sellbutton);
+                        b.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View view) {
+                                try {
+                                    Intent intent = new Intent(getApplicationContext(), DetailView.class);
+                                    intent.putExtra("isSellable","false");
+                                    intent.putExtra("dataType",data.getString("dataType"));
+                                    intent.putExtra("age",data.getString("age"));
+                                    intent.putExtra("gender",data.getString("gender"));
+                                    intent.putExtra("startDataDate",data.getString("startDate"));
+                                    intent.putExtra("stopDataDate", data.getString("endDate"));
+                                    intent.putExtra("validUntil",data.getString("validUntilDate"));
+                                    intent.putExtra("amountOfData",data.getString("amountOfData"));
+                                    intent.putExtra("metaDate",data.getString("metaData"));
+                                    intent.putExtra("gatekeeperIP",data.getString("gatekeeper"));
+                                    intent.putExtra("expectedPrice",data.getString("expectedPrice"));
+                                    intent.putExtra("totalPrice",tupel.getValue3().toString());
+                                    intent.putExtra("privacyValue",data.getString("privacyValue"));
+                                    intent.putExtra("anonymityValue",data.getString("anonymity"));
+                                    startActivity(intent);
+                                }catch (Exception e){
+                                    Log.i("Error_LOG", e.getMessage());
+                                }
+                            }
+                        });
+                    }
                     ll.addView(b);
                 }
             }catch (Exception e){

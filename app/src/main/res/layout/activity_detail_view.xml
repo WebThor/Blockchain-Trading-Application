@@ -8,12 +8,12 @@
 
     <LinearLayout
         android:id="@+id/linearLayoutPreview"
-        android:layout_width="351dp"
-        android:layout_height="443dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="43dp"
+        android:layout_width="0dp"
+        android:layout_height="489dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="56dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/buyOfferButton"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,6 +38,11 @@
 
         <TextView
             android:id="@+id/educationFieldDetail"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+        <TextView
+            android:id="@+id/amountOfDataDetail"
             android:layout_width="match_parent"
             android:layout_height="40dp" />
 
@@ -83,13 +88,24 @@
         android:layout_width="132dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="251dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="28dp"
-        android:layout_marginBottom="36dp"
         android:background="@drawable/mybutton"
         android:text="Buy Offer"
         android:textColor="#ffffff"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutPreview"
+        android:onClick="onBuyOffer"/>
+
+    <Button
+        android:id="@+id/solveRequestButton"
+        android:layout_width="132dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="251dp"
+        android:layout_marginEnd="28dp"
+        android:background="@drawable/mybutton"
+        android:text="Solve Request"
+        android:textColor="#ffffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutPreview" />
