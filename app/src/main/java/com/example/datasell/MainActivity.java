@@ -1,9 +1,7 @@
 package com.example.datasell;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.RequiresPermission;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -18,22 +16,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.List;
 
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -118,58 +108,10 @@ public class MainActivity extends AppCompatActivity
                     b.setText(text);
                     if(isAnonymized(data.getString("anonymity"))){
                         b.setBackgroundResource(R.drawable.buyanonymizedbutton);
-                        b.setOnClickListener(new View.OnClickListener() {
-                            public void onClick(View view) {
-                                try {
-                                    Intent intent = new Intent(getApplicationContext(), DetailView.class);
-                                    intent.putExtra("blockchainURI",uri);
-                                    intent.putExtra("address",s);
-                                    intent.putExtra("isSellable","true");
-                                    intent.putExtra("dataType",data.getString("dataType"));
-                                    intent.putExtra("age","");
-                                    intent.putExtra("gender","");
-                                    intent.putExtra("educationString","");
-                                    intent.putExtra("startDataDate",data.getString("startDate"));
-                                    intent.putExtra("stopDataDate", data.getString("endDate"));
-                                    intent.putExtra("validUntil",data.getString("validUntilDate"));
-                                    intent.putExtra("metaDate",data.getString("metaData"));
-                                    intent.putExtra("gatekeeperIP",data.getString("gatekeeper"));
-                                    intent.putExtra("totalPrice",tupel.getValue3().toString());
-                                    intent.putExtra("privacyValue",data.getString("privacyValue"));
-                                    intent.putExtra("anonymityValue",data.getString("anonymity"));
-                                    startActivity(intent);
-                                }catch (Exception e){
-                                    Log.i("Error_LOG", e.getMessage());
-                                }
-                            }
-                        });
+                        b.setOnClickListener( getAnonymOfferDetailViewListener(s,tupel.getValue3().toString(),data));
                     }else{
                         b.setBackgroundResource(R.drawable.buybutton);
-                        b.setOnClickListener(new View.OnClickListener() {
-                            public void onClick(View view) {
-                                try {
-                                    Intent intent = new Intent(getApplicationContext(), DetailView.class);
-                                    intent.putExtra("blockchainURI",uri);
-                                    intent.putExtra("address",s);
-                                    intent.putExtra("isSellable","true");
-                                    intent.putExtra("dataType",data.getString("dataType"));
-                                    intent.putExtra("age",data.getString("age"));
-                                    intent.putExtra("gender",data.getString("gender"));
-                                    intent.putExtra("educationString",data.getString("education"));
-                                    intent.putExtra("startDataDate",data.getString("startDate"));
-                                    intent.putExtra("stopDataDate", data.getString("endDate"));
-                                    intent.putExtra("validUntil",data.getString("validUntilDate"));
-                                    intent.putExtra("metaDate",data.getString("metaData"));
-                                    intent.putExtra("gatekeeperIP",data.getString("gatekeeper"));
-                                    intent.putExtra("totalPrice",tupel.getValue3().toString());
-                                    intent.putExtra("privacyValue",data.getString("privacyValue"));
-                                    intent.putExtra("anonymityValue",data.getString("anonymity"));
-                                    startActivity(intent);
-                                }catch (Exception e){
-                                    Log.i("Error_LOG", e.getMessage());
-                                }
-                            }
-                        });
+                        b.setOnClickListener(getOfferDetailViewListener(s,tupel.getValue3().toString(),data));
                     }
                     llOffer.addView(b);
                     //If is Request
@@ -178,61 +120,10 @@ public class MainActivity extends AppCompatActivity
                     b.setText(text);
                     if(isAnonymized(data.getString("anonymity"))){
                         b.setBackgroundResource(R.drawable.sellanonymizedbutton);
-                        b.setOnClickListener(new View.OnClickListener() {
-                            public void onClick(View view) {
-                                try {
-                                    Intent intent = new Intent(getApplicationContext(), DetailView.class);
-                                    intent.putExtra("blockchainURI",uri);
-                                    intent.putExtra("address",s);
-                                    intent.putExtra("isSellable","true");
-                                    intent.putExtra("dataType",data.getString("dataType"));
-                                    intent.putExtra("age","");
-                                    intent.putExtra("gender","");
-                                    intent.putExtra("educationString","");
-                                    intent.putExtra("startDataDate",data.getString("startDate"));
-                                    intent.putExtra("stopDataDate", data.getString("endDate"));
-                                    intent.putExtra("validUntil",data.getString("validUntilDate"));
-                                    intent.putExtra("amountOfData",data.getString("amountOfData"));
-                                    intent.putExtra("metaDate",data.getString("metaData"));
-                                    intent.putExtra("gatekeeperIP",data.getString("gatekeeper"));
-                                    intent.putExtra("expectedPrice",data.getString("expectedPrice"));
-                                    intent.putExtra("totalPrice",tupel.getValue3().toString());
-                                    intent.putExtra("privacyValue",data.getString("privacyValue"));
-                                    intent.putExtra("anonymityValue",data.getString("anonymity"));
-                                    startActivity(intent);
-                                }catch (Exception e){
-                                    Log.i("Error_LOG", e.getMessage());
-                                }
-                            }
-                        });
+                        b.setOnClickListener(getAnonymRequestDetailViewListener(s,tupel.getValue3().toString(),data));
                     }else{
                         b.setBackgroundResource(R.drawable.sellbutton);
-                        b.setOnClickListener(new View.OnClickListener() {
-                            public void onClick(View view) {
-                                try {
-                                    Intent intent = new Intent(getApplicationContext(), DetailView.class);
-                                    intent.putExtra("blockchainURI",uri);
-                                    intent.putExtra("address",s);
-                                    intent.putExtra("isSellable","true");
-                                    intent.putExtra("dataType",data.getString("dataType"));
-                                    intent.putExtra("age",data.getString("age"));
-                                    intent.putExtra("gender",data.getString("gender"));
-                                    intent.putExtra("startDataDate",data.getString("startDate"));
-                                    intent.putExtra("stopDataDate", data.getString("endDate"));
-                                    intent.putExtra("validUntil",data.getString("validUntilDate"));
-                                    intent.putExtra("amountOfData",data.getString("amountOfData"));
-                                    intent.putExtra("metaDate",data.getString("metaData"));
-                                    intent.putExtra("gatekeeperIP",data.getString("gatekeeper"));
-                                    intent.putExtra("expectedPrice",data.getString("expectedPrice"));
-                                    intent.putExtra("totalPrice",tupel.getValue3().toString());
-                                    intent.putExtra("privacyValue",data.getString("privacyValue"));
-                                    intent.putExtra("anonymityValue",data.getString("anonymity"));
-                                    startActivity(intent);
-                                }catch (Exception e){
-                                    Log.i("Error_LOG", e.getMessage());
-                                }
-                            }
-                        });
+                        b.setOnClickListener(getRequestDetailViewListener(s,tupel.getValue3().toString(),data));
                     }
                     llRequest.addView(b);
                 }
@@ -240,6 +131,119 @@ public class MainActivity extends AppCompatActivity
                 Log.i("LOG_TAG",e.getMessage());
             }
         }
+    }
+
+
+
+    private View.OnClickListener getAnonymRequestDetailViewListener(String address, String price, JSONObject data){
+        View.OnClickListener listener = view -> {
+            try {
+                Intent intent = new Intent(getApplicationContext(), DetailView.class);
+                intent.putExtra("blockchainURI",uri);
+                intent.putExtra("address",address);
+                intent.putExtra("isSellable","true");
+                intent.putExtra("dataType",data.getString("dataType"));
+                intent.putExtra("age","");
+                intent.putExtra("gender","");
+                intent.putExtra("educationString","");
+                intent.putExtra("startDataDate",data.getString("startDate"));
+                intent.putExtra("stopDataDate", data.getString("endDate"));
+                intent.putExtra("validUntil",data.getString("validUntilDate"));
+                intent.putExtra("amountOfData",data.getString("amountOfData"));
+                intent.putExtra("metaDate",data.getString("metaData"));
+                intent.putExtra("gatekeeperIP",data.getString("gatekeeper"));
+                intent.putExtra("expectedPrice",data.getString("expectedPrice"));
+                intent.putExtra("totalPrice",price);
+                intent.putExtra("privacyValue",data.getString("privacyValue"));
+                intent.putExtra("anonymityValue",data.getString("anonymity"));
+                startActivity(intent);
+            }catch (Exception e){
+                Log.i("Error_LOG", e.getMessage());
+            }
+        };
+        return listener;
+    }
+
+    private View.OnClickListener getRequestDetailViewListener(String address, String price, JSONObject data){
+        View.OnClickListener listener = view -> {
+            try {
+                Intent intent = new Intent(getApplicationContext(), DetailView.class);
+                intent.putExtra("blockchainURI",uri);
+                intent.putExtra("address",address);
+                intent.putExtra("isSellable","true");
+                intent.putExtra("dataType",data.getString("dataType"));
+                intent.putExtra("age",data.getString("age"));
+                intent.putExtra("gender",data.getString("gender"));
+                intent.putExtra("startDataDate",data.getString("startDate"));
+                intent.putExtra("stopDataDate", data.getString("endDate"));
+                intent.putExtra("validUntil",data.getString("validUntilDate"));
+                intent.putExtra("amountOfData",data.getString("amountOfData"));
+                intent.putExtra("metaDate",data.getString("metaData"));
+                intent.putExtra("gatekeeperIP",data.getString("gatekeeper"));
+                intent.putExtra("expectedPrice",data.getString("expectedPrice"));
+                intent.putExtra("totalPrice",price);
+                intent.putExtra("privacyValue",data.getString("privacyValue"));
+                intent.putExtra("anonymityValue",data.getString("anonymity"));
+                startActivity(intent);
+            }catch (Exception e){
+                Log.i("Error_LOG", e.getMessage());
+            }
+        };
+        return listener;
+    }
+
+    private View.OnClickListener getOfferDetailViewListener(String address, String price, JSONObject data){
+        View.OnClickListener listener = view -> {
+            try {
+                Intent intent = new Intent(getApplicationContext(), DetailView.class);
+                intent.putExtra("blockchainURI",uri);
+                intent.putExtra("address",address);
+                intent.putExtra("isSellable","true");
+                intent.putExtra("dataType",data.getString("dataType"));
+                intent.putExtra("age",data.getString("age"));
+                intent.putExtra("gender",data.getString("gender"));
+                intent.putExtra("educationString",data.getString("education"));
+                intent.putExtra("startDataDate",data.getString("startDate"));
+                intent.putExtra("stopDataDate", data.getString("endDate"));
+                intent.putExtra("validUntil",data.getString("validUntilDate"));
+                intent.putExtra("metaDate",data.getString("metaData"));
+                intent.putExtra("gatekeeperIP",data.getString("gatekeeper"));
+                intent.putExtra("totalPrice",price);
+                intent.putExtra("privacyValue",data.getString("privacyValue"));
+                intent.putExtra("anonymityValue",data.getString("anonymity"));
+                startActivity(intent);
+            }catch (Exception e){
+                Log.i("Error_LOG", e.getMessage());
+            }
+        };
+        return listener;
+    }
+
+    private View.OnClickListener getAnonymOfferDetailViewListener(String address, String price, JSONObject data){
+        View.OnClickListener listener = view -> {
+            try {
+                Intent intent = new Intent(getApplicationContext(), DetailView.class);
+                intent.putExtra("blockchainURI",uri);
+                intent.putExtra("address",address);
+                intent.putExtra("isSellable","true");
+                intent.putExtra("dataType",data.getString("dataType"));
+                intent.putExtra("age","");
+                intent.putExtra("gender","");
+                intent.putExtra("educationString","");
+                intent.putExtra("startDataDate",data.getString("startDate"));
+                intent.putExtra("stopDataDate", data.getString("endDate"));
+                intent.putExtra("validUntil",data.getString("validUntilDate"));
+                intent.putExtra("metaDate",data.getString("metaData"));
+                intent.putExtra("gatekeeperIP",data.getString("gatekeeper"));
+                intent.putExtra("totalPrice",price);
+                intent.putExtra("privacyValue",data.getString("privacyValue"));
+                intent.putExtra("anonymityValue",data.getString("anonymity"));
+                startActivity(intent);
+            }catch (Exception e){
+                Log.i("Error_LOG", e.getMessage());
+            }
+        };
+        return listener;
     }
 
 
@@ -346,7 +350,9 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, MyOffers.class);
             intent.putExtra("blockchainURI",uri);
             startActivity(intent);
-        } else if (id == R.id.nav_history) {
+        } else if (id == R.id.nav_bids) {
+            startActivity(new Intent(this, History.class));
+        }else if (id == R.id.nav_mypurchases) {
             startActivity(new Intent(this, History.class));
         } else if (id == R.id.nav_data) {
             startActivity(new Intent(this, DataStore.class));

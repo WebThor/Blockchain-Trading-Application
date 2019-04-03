@@ -139,6 +139,14 @@ public  class BlockchainManager  {
         return "";
     }
 
+    protected static void makeBid(Deal deal, String data){
+        try {
+            deal.addBid(data,BigInteger.ZERO).sendAsync().get();
+        }catch (Exception e){
+            Log.i("ErrorLog",e.getMessage());
+        }
+    }
+
     protected static Deal loadDeal(String address,Web3j web3,Credentials creds){
         return Deal.load(address,web3,creds,GAS_PRICE,GAS_LIMIT);
     }

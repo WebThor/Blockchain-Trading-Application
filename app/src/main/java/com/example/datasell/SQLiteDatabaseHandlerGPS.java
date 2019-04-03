@@ -12,10 +12,12 @@ import android.util.Log;
 
 import com.example.datasell.GPS_Service_Package.GPSData;
 
+import org.web3j.tuples.generated.Tuple2;
+
 public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
 
 
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     //DB values
     private static final String DATABASE_NAME = "DataSellerDB";
 
@@ -31,6 +33,11 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
 
     //Request table value
     private static final String TABLE_NAME_REQUEST= "Request_Table";
+
+    //Request table value
+    private static final String TABLE_NAME_BID= "Bid_Table";
+    private static final String KEY_CONTRACTADDRESS= "contractAddress";
+    private static final String KEY_BIDDATA = "data";
 
 
     //User table and values
@@ -61,6 +68,9 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
         String CREATION_TABLE_REQUESTS = "CREATE TABLE Request_Table ( "
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT, " +"ownerAddress TEXT)";
 
+        String CREATION_TABLE_BIDS = "CREATE TABLE Bid_Table ( "
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, " +"contractAddress TEXT, " + "data TEXT)";
+
         String CREATION_TABLE_USER = "CREATE TABLE USER_Table ( "
                 + "address TEXT PRIMARY KEY, "
                 + "isCollectingGPS INTEGER, " + "isCollectingApps INTEGER )";
@@ -68,6 +78,7 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
         db.execSQL(CREATION_TABLE_GPS);
         db.execSQL(CREATION_TABLE_OFFERS);
         db.execSQL(CREATION_TABLE_REQUESTS);
+        db.execSQL(CREATION_TABLE_BIDS);
         db.execSQL(CREATION_TABLE_USER);
     }
 
@@ -77,6 +88,7 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_GPS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_OFFERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_REQUEST);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_BID);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_USER);
         this.onCreate(db);
     }
@@ -139,7 +151,6 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
                 gpsData.setTime(cursor.getString(1));
                 gpsData.setLongitude(cursor.getString(2));
                 gpsData.setLatitude(cursor.getString(3));
-
                 gpsPositions.add(gpsData);
 
             } while (cursor.moveToNext());
@@ -170,6 +181,32 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
         db.insert(TABLE_NAME_GPS,null, values);
         db.close();
     }
+
+    public void addBid(String address, String data ) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_CONTRACTADDRESS,address);
+        values.put(KEY_BIDDATA,data);
+        // insert
+        db.insert(TABLE_NAME_BID,null, values);
+        db.close();
+    }
+
+    public List<Tuple2<String,String>> getAllBids(){
+       List<Tuple2<String,String>> bids = new LinkedList<Tuple2<String,String>>();
+        String query = "SELECT  * FROM " + TABLE_NAME_BID;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                bids.add(new Tuple2<>(cursor.getString(1),cursor.getString(2)));
+
+            } while (cursor.moveToNext());
+        }
+
+        return bids;
+    }
+
 
     public void addOffer(String address ) {
         SQLiteDatabase db = this.getWritableDatabase();

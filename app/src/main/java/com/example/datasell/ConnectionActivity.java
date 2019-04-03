@@ -28,8 +28,6 @@ public class ConnectionActivity extends AppCompatActivity  {
     // UI references.
     private TextView ipAddress;
     private TextView port;
-    private View mProgressView;
-    private View mLoginFormView;
     private MaterialBetterSpinner dropdownAddressbook;
 
 
@@ -57,9 +55,6 @@ public class ConnectionActivity extends AppCompatActivity  {
                 attemptLogin();
             }
         });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
     }
 
 
@@ -72,9 +67,6 @@ public class ConnectionActivity extends AppCompatActivity  {
         // Store values at the time of the login attempt.
         String ip = ipAddress.getText().toString();
         String portValue = port.getText().toString();
-
-        Log.i("connectionLog_ip",ip);
-        Log.i("connectionLog_port",portValue);
         boolean cancel = false;
         View focusView = null;
 

@@ -1,5 +1,6 @@
 package com.example.datasell;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -132,7 +133,8 @@ public class DetailView extends AppCompatActivity {
 
     }
 
-    public void onBuyOffer(View v){
+    public void onMakeBuyOffer(View v){
+        /*
         boolean success = false;
         if(!uri.equals("") && !address.equals("")){
             Web3j web3j = BlockchainManager.connectToEthereumTestnet(uri);
@@ -150,7 +152,11 @@ public class DetailView extends AppCompatActivity {
         }
         if(success){
             Log.i("LOG_TAG","success");
-        }
+        } */
+        Intent intent = new Intent(this, Bids.class);
+        intent.putExtra("address",address);
+        intent.putExtra("blockchainURI",uri);
+        startActivity(intent);
     }
 
 }

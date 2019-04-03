@@ -7,7 +7,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_offer"
-            android:icon="@android:drawable/stat_notify_chat"
+            android:icon="@drawable/ic_local_offer_black_24dp"
             android:title="New Offer" />
         <item
             android:id="@+id/nav_request"
@@ -15,16 +15,20 @@
             android:title="New Request" />
         <item
             android:id="@+id/nav_connection"
-            android:icon="@android:drawable/ic_menu_view"
+            android:icon="@drawable/ic_connection"
             android:title="Connection" />
         <item
             android:id="@+id/nav_myOffers"
             android:icon="@android:drawable/btn_star"
             android:title="My Offers" />
         <item
-            android:id="@+id/nav_history"
-            android:icon="@android:drawable/ic_menu_recent_history"
-            android:title="History" />
+            android:id="@+id/nav_bids"
+            android:icon="@drawable/ic_drafts_black_24dp"
+            android:title="Bids" />
+        <item
+            android:id="@+id/nav_mypurchases"
+            android:icon="@drawable/ic_shopping_basket_black_24dp"
+            android:title="Purchases" />
         <item
             android:id="@+id/nav_data"
             android:icon="@android:drawable/ic_menu_save"
