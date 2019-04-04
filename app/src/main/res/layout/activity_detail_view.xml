@@ -90,7 +90,7 @@
         android:layout_marginStart="251dp"
         android:layout_marginEnd="28dp"
         android:background="@drawable/mybutton"
-        android:text="Buy Offer"
+        android:text="Make Bid"
         android:textColor="#ffffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -108,6 +108,20 @@
         android:textColor="#ffffff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutPreview" />
+
+    <Button
+        android:id="@+id/showOfferButton"
+        android:layout_width="132dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="251dp"
+        android:layout_marginEnd="28dp"
+        android:background="@drawable/mybutton"
+        android:text="Show Offers"
+        android:textColor="#ffffff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:onClick="onShowOffers"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutPreview" />
 
 </android.support.constraint.ConstraintLayout>

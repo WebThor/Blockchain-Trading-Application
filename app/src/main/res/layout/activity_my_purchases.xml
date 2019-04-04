@@ -4,22 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OfferDetails">
+    tools:context=".MyPurchases">
 
     <ScrollView
-        android:id="@+id/offersScrollview"
         android:layout_width="match_parent"
-        android:layout_height="468dp"
+        android:layout_height="552dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="71dp"
+        android:layout_marginTop="63dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/offersLinearLayout"
+            android:id="@+id/purchasesLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />

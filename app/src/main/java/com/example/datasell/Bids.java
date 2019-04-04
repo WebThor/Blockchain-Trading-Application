@@ -118,7 +118,7 @@ public class Bids extends AppCompatActivity {
             Web3j web3j = BlockchainManager.connectToEthereumTestnet(uri);
             Deal deal = BlockchainManager.loadDeal(address,web3j,BlockchainManager.getBuyerCredentials());
             BlockchainManager.makeBid(deal,jsonObj.toString());
-            Toast.makeText(getApplicationContext(),"Your Bid is registered" ,Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"Your bid has been registered" ,Toast.LENGTH_SHORT).show();
             db.addBid(address,jsonObj.toString());
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("blockchainURI",uri);

@@ -28,9 +28,11 @@ public class DetailView extends AppCompatActivity {
     private TextView amountField;
     private Button placOrderButton;
     private Button solveRequestButton;
+    private Button showOfferButton;
 
 
     private boolean isSellable;
+    private boolean showOffer;
     private String address;
     private String dataType;
     private String age;
@@ -68,10 +70,14 @@ public class DetailView extends AppCompatActivity {
         amountField.setVisibility(View.GONE);
         placOrderButton= (Button) findViewById(R.id.buyOfferButton);
         solveRequestButton= (Button) findViewById(R.id.solveRequestButton);
-
+        showOfferButton = (Button) findViewById(R.id.showOfferButton);
+        showOffer = false;
         solveRequestButton.setVisibility(View.GONE);
+        showOfferButton.setVisibility(View.GONE);
 
         isSellable = Boolean.parseBoolean(getIntent().getStringExtra("isSellable"));
+
+
         dataType = getIntent().getStringExtra("dataType");
         age = getIntent().getStringExtra("age");
         gender = getIntent().getStringExtra("gender");
@@ -85,6 +91,13 @@ public class DetailView extends AppCompatActivity {
         weiPrice = BigInteger.valueOf(Long.parseLong(totalPrice));
         privacyValueString  = getIntent().getStringExtra("privacyValue");
         anonymityConfig  = getIntent().getStringExtra("anonymityValue");
+
+        try {
+            showOffer = getIntent().getBooleanExtra("showOffer",false);
+        }catch (Exception e){
+
+        }
+
         try {
             address = getIntent().getStringExtra("address");
         }catch (Exception e){
@@ -99,7 +112,7 @@ public class DetailView extends AppCompatActivity {
         try {
             String amountOfData = getIntent().getStringExtra("amountOfData");
             String price = getIntent().getStringExtra("expectedPrice");
-            if(!amountOfData.equals("") && !price.equals("")){
+            if(!amountOfData.equals("") && !price.equals("") && !showOffer){
                 amountField.setVisibility(View.VISIBLE);
                 amountField.setText("Amount of Data: "+amountOfData);
                 solveRequestButton.setVisibility(View.VISIBLE);
@@ -125,11 +138,14 @@ public class DetailView extends AppCompatActivity {
         priceField.setText("Total Price: (Ether) " + ether);
 
 
-        if(isSellable){
+        if(isSellable && !showOffer){
             placOrderButton.setVisibility(View.VISIBLE);
         }else {
             placOrderButton.setVisibility(View.GONE);
+            showOfferButton.setVisibility(View.VISIBLE);
         }
+
+
 
     }
 
@@ -157,6 +173,23 @@ public class DetailView extends AppCompatActivity {
         intent.putExtra("address",address);
         intent.putExtra("blockchainURI",uri);
         startActivity(intent);
+    }
+
+    public void onShowOffers(View v){
+
+        String contractAddress = "";
+        try {
+            contractAddress = getIntent().getStringExtra("contractAddress");
+        }catch (Exception e){
+
+        }
+        if(!contractAddress.equals("")){
+            Intent intent = new Intent(this, OfferDetails.class);
+            intent.putExtra("contractAddress",contractAddress);
+            intent.putExtra("blockchainURI",uri);
+            startActivity(intent);
+        }
+
     }
 
 }

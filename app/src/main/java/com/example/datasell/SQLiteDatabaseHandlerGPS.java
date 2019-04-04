@@ -2,6 +2,7 @@ package com.example.datasell;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.SimpleTimeZone;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -17,7 +18,7 @@ import org.web3j.tuples.generated.Tuple2;
 public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
 
 
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 5;
     //DB values
     private static final String DATABASE_NAME = "DataSellerDB";
 
@@ -34,10 +35,15 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
     //Request table value
     private static final String TABLE_NAME_REQUEST= "Request_Table";
 
-    //Request table value
+    //Bid table value
     private static final String TABLE_NAME_BID= "Bid_Table";
     private static final String KEY_CONTRACTADDRESS= "contractAddress";
     private static final String KEY_BIDDATA = "data";
+
+    //Purches table value
+    private static final String TABLE_NAME_PURCHASE= "Purchase_Table";
+
+
 
 
     //User table and values
@@ -71,6 +77,9 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
         String CREATION_TABLE_BIDS = "CREATE TABLE Bid_Table ( "
                 + "id INTEGER PRIMARY KEY AUTOINCREMENT, " +"contractAddress TEXT, " + "data TEXT)";
 
+        String CREATION_TABLE_PURCHASE = "CREATE TABLE Purchase_Table ( "
+                + "id INTEGER PRIMARY KEY AUTOINCREMENT, " +"contractAddress TEXT )";
+
         String CREATION_TABLE_USER = "CREATE TABLE USER_Table ( "
                 + "address TEXT PRIMARY KEY, "
                 + "isCollectingGPS INTEGER, " + "isCollectingApps INTEGER )";
@@ -79,6 +88,7 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
         db.execSQL(CREATION_TABLE_OFFERS);
         db.execSQL(CREATION_TABLE_REQUESTS);
         db.execSQL(CREATION_TABLE_BIDS);
+        db.execSQL(CREATION_TABLE_PURCHASE);
         db.execSQL(CREATION_TABLE_USER);
     }
 
@@ -89,6 +99,7 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_OFFERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_REQUEST);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_BID);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_PURCHASE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_USER);
         this.onCreate(db);
     }
@@ -182,14 +193,59 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
         db.close();
     }
 
+
+    public void addPurchase(String address) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        String query = "SELECT  * FROM " + TABLE_NAME_PURCHASE + " WHERE " + "contractAddress" + " LIKE " + "'%" +tailorID(address) + "%'";
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.getCount() <= 0){
+            values.put(KEY_CONTRACTADDRESS,address);
+            db.insert(TABLE_NAME_PURCHASE,null, values);
+        }
+        db.close();
+    }
+
+    public List<String> getAllPurchases(){
+       List<String> bids = new LinkedList<String>();
+        String query = "SELECT  * FROM " + TABLE_NAME_PURCHASE;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                bids.add(cursor.getString(1));
+            } while (cursor.moveToNext());
+        }
+
+        return bids;
+    }
+
+
+
+
     public void addBid(String address, String data ) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_CONTRACTADDRESS,address);
-        values.put(KEY_BIDDATA,data);
-        // insert
-        db.insert(TABLE_NAME_BID,null, values);
+        String query = "SELECT  * FROM " + TABLE_NAME_BID + " WHERE " + "contractAddress" + " LIKE " + "'%" +tailorID(address) + "%'";
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.getCount() <= 0){
+            values.put(KEY_CONTRACTADDRESS,address);
+            values.put(KEY_BIDDATA,data);
+            db.insert(TABLE_NAME_BID,null, values);
+        }
         db.close();
+    }
+
+    public boolean removeBid(String address){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        String query = "SELECT  * FROM " + TABLE_NAME_BID + " WHERE " + "contractAddress" + " LIKE " + "'%" +tailorID(address) + "%'";
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.moveToFirst()){
+            int index = cursor.getInt(0);
+            return db.delete(TABLE_NAME_BID, "id" + "=?", new String[]{String.valueOf(index)}) > 0;
+        }
+        return false;
     }
 
     public List<Tuple2<String,String>> getAllBids(){
@@ -216,6 +272,7 @@ public class SQLiteDatabaseHandlerGPS extends SQLiteOpenHelper {
         db.insert(TABLE_NAME_OFFERS,null, values);
         db.close();
     }
+
 
 
 

@@ -19,7 +19,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ShowBid"></activity>
+        <activity android:name=".MyPurchases"></activity>
+        <activity android:name=".MyBids" />
+        <activity android:name=".OfferDetailView" />
         <activity android:name=".Bids" />
         <activity android:name=".NewRequest" />
         <activity android:name=".DetailView" />

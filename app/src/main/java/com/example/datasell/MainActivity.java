@@ -350,10 +350,12 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, MyOffers.class);
             intent.putExtra("blockchainURI",uri);
             startActivity(intent);
-        } else if (id == R.id.nav_bids) {
-            startActivity(new Intent(this, History.class));
+        } else if (id == R.id.nav_myBids) {
+            Intent intent = new Intent(this, MyBids.class);
+            intent.putExtra("blockchainURI",uri);
+            startActivity(intent);
         }else if (id == R.id.nav_mypurchases) {
-            startActivity(new Intent(this, History.class));
+            startActivity(new Intent(this, MyPurchases.class));
         } else if (id == R.id.nav_data) {
             startActivity(new Intent(this, DataStore.class));
         }

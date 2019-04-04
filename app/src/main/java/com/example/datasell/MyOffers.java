@@ -12,6 +12,7 @@ import android.widget.Toast;
 import org.json.JSONObject;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.tuples.generated.Tuple2;
 import org.web3j.tuples.generated.Tuple3;
 
 import java.math.BigInteger;
@@ -34,11 +35,14 @@ public class MyOffers extends AppCompatActivity {
          for(String s : myRequests){
              myOffers.add(s);
          }
-        db.close();
+
         uri = getIntent().getStringExtra("blockchainURI");
         Log.i("MyOffer_LOG",uri);
         web3j = BlockchainManager.connectToEthereumTestnet(uri);
         getOffers(myOffers);
+        getBids(db.getAllBids());
+
+        db.close();
     }
 
     public void getOffers(List<String> addresses){
@@ -64,6 +68,9 @@ public class MyOffers extends AppCompatActivity {
                                 try {
                                     Intent intent = new Intent(getApplicationContext(), DetailView.class);
                                     intent.putExtra("isSellable","false");
+                                    intent.putExtra("showOffer","true");
+                                    intent.putExtra("contractAddress",s);
+                                    intent.putExtra("blockchainURI",uri);
                                     intent.putExtra("dataType",data.getString("dataType"));
                                     intent.putExtra("age","");
                                     intent.putExtra("gender","");
@@ -89,6 +96,9 @@ public class MyOffers extends AppCompatActivity {
                                 try {
                                     Intent intent = new Intent(getApplicationContext(), DetailView.class);
                                     intent.putExtra("isSellable","false");
+                                    intent.putExtra("showOffer","true");
+                                    intent.putExtra("contractAddress",s);
+                                    intent.putExtra("blockchainURI",uri);
                                     intent.putExtra("dataType",data.getString("dataType"));
                                     intent.putExtra("age",data.getString("age"));
                                     intent.putExtra("gender",data.getString("gender"));
@@ -120,6 +130,9 @@ public class MyOffers extends AppCompatActivity {
                                 try {
                                     Intent intent = new Intent(getApplicationContext(), DetailView.class);
                                     intent.putExtra("isSellable","false");
+                                    intent.putExtra("showOffer","true");
+                                    intent.putExtra("contractAddress",s);
+                                    intent.putExtra("blockchainURI",uri);
                                     intent.putExtra("dataType",data.getString("dataType"));
                                     intent.putExtra("age","");
                                     intent.putExtra("gender","");
@@ -147,6 +160,9 @@ public class MyOffers extends AppCompatActivity {
                                 try {
                                     Intent intent = new Intent(getApplicationContext(), DetailView.class);
                                     intent.putExtra("isSellable","false");
+                                    intent.putExtra("showOffer","true");
+                                    intent.putExtra("contractAddress",s);
+                                    intent.putExtra("blockchainURI",uri);
                                     intent.putExtra("dataType",data.getString("dataType"));
                                     intent.putExtra("age",data.getString("age"));
                                     intent.putExtra("gender",data.getString("gender"));
@@ -173,6 +189,13 @@ public class MyOffers extends AppCompatActivity {
                 Log.i("LOG_TAG",e.getMessage());
             }
         }
+    }
+
+    public void getBids(List<Tuple2<String,String>> tupe){
+        for (Tuple2<String,String> t : tupe){
+            Log.i("LOG_TAG",t.getValue1());
+        }
+
     }
 
 }

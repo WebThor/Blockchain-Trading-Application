@@ -12,17 +12,21 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.methods.response.Web3ClientVersion;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tuples.generated.Tuple2;
 
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public  class BlockchainManager  {
     protected final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
     protected final static BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
-    private final static String ADDRESSBOOK = "0x4e9c9cfe1b3982714de6bb34fdd0353b99921aa6";
+
+    private final static String ADDRESSBOOK = "0x0dc778b72ef64bd476f3c43111ba2129a6908814";
+
 
     public static String getADDRESSBOOK() {
         return ADDRESSBOOK;
@@ -32,11 +36,16 @@ public  class BlockchainManager  {
 
 
     protected static  Credentials getCredentialsFromPrivateKey(){
-        return Credentials.create("ea0b514ab66b89ba6877ea27f3e56d9d33f4b4951cb4930f07edb13933f569d0");
+        return Credentials.create("ecf02ad755aa0f207d922d6b11560044e6a1dc3663615381065c7a1f9230bb29");
     }
 
     protected static Credentials getBuyerCredentials(){
-        return Credentials.create("6c540fdecca7b39c74b2aab1b5c8fd0e476b6227c60bd4572d21e0f930809d4d");
+        //return Credentials.create("d32083a9caf922a7b8e8843b4cb1a23729d7fbea43dd9597c7766b17f6d45ef1");
+        return Credentials.create("ecf02ad755aa0f207d922d6b11560044e6a1dc3663615381065c7a1f9230bb29");
+    }
+
+    protected static String getMyAddress(){
+        return "0x6a2138e87ca3291f57f2b21a455b426b6390017b";
     }
 
     protected static Web3j connectToEthereumTestnet(String url){
@@ -126,6 +135,16 @@ public  class BlockchainManager  {
         return false;
     }
 
+    protected static boolean deleteBid(Deal deal, String bidder){
+
+        try{
+            deal.removeBid(bidder, BigInteger.ZERO).sendAsync().get();
+            return true;
+        }catch(Exception e){
+
+        }
+        return false;
+    }
 
     protected static String deployDeal(Web3j web3,Credentials creds, String addressBook, String  data, BigInteger price){
         try {
@@ -139,11 +158,43 @@ public  class BlockchainManager  {
         return "";
     }
 
+    protected static int getBidCount(Deal deal) {
+        int i = 0;
+
+        try {
+            i = deal.getBidCount().sendAsync().get().intValue();
+        } catch (Exception e) {
+            Log.i("ErrorLog", e.getMessage());
+        }
+        return i;
+    }
+
+    protected static List<Tuple2<String,String>> getBids(Deal deal){
+        int i = getBidCount(deal);
+        List<Tuple2<String,String>> values = new LinkedList<>();
+        try {
+            for (int a = 0; a < i; a++){
+                values.add(deal.getBidAtPosition(BigInteger.valueOf((long)a)).sendAsync().get());
+            }
+        }catch (Exception e){
+            Log.i("ErrorLog", e.getMessage());
+        }
+        return values;
+    }
+
     protected static void makeBid(Deal deal, String data){
         try {
             deal.addBid(data,BigInteger.ZERO).sendAsync().get();
         }catch (Exception e){
             Log.i("ErrorLog",e.getMessage());
+        }
+    }
+
+    protected static void setAllowedBidder(String address, Deal deal){
+        try {
+            deal.setAllowerdBuyer(address, BigInteger.ZERO).sendAsync().get();
+        }catch (Exception e){
+
         }
     }
 

@@ -22,13 +22,13 @@
             android:icon="@android:drawable/btn_star"
             android:title="My Offers" />
         <item
-            android:id="@+id/nav_bids"
-            android:icon="@drawable/ic_drafts_black_24dp"
-            android:title="Bids" />
+            android:id="@+id/nav_myBids"
+            android:icon="@drawable/ic_gavel_black_24dp"
+            android:title="My Bids" />
         <item
             android:id="@+id/nav_mypurchases"
             android:icon="@drawable/ic_shopping_basket_black_24dp"
-            android:title="Purchases" />
+            android:title="My Purchases" />
         <item
             android:id="@+id/nav_data"
             android:icon="@android:drawable/ic_menu_save"
