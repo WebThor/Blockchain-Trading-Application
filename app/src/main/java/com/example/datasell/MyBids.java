@@ -3,6 +3,8 @@ package com.example.datasell;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -42,7 +44,8 @@ public class MyBids extends Activity {
 
         for(Tuple2<String,String> t : list){
             Button b = new Button(this);
-            Deal deal = BlockchainManager.loadDeal(t.getValue1(),web3j,BlockchainManager.getCredentialsFromPrivateKey());
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            Deal deal = BlockchainManager.loadDeal(t.getValue1(),web3j,BlockchainManager.getCredentialsFromPrivateKey(sharedPreferences.getString("privatekey", "")));
             int state = getStateOfTheOffer(deal);
             b.setBackgroundResource(state);
             if(state == R.drawable.sellbutton){

@@ -1,6 +1,8 @@
 package com.example.datasell;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -189,7 +191,8 @@ public class PlaceOrder extends AppCompatActivity {
             wei = wei * 1000000000;
             Log.i("JSON",String.valueOf(wei));
             Log.i("JSON",jsonObj.toString());
-            String address = BlockchainManager.deployDeal(web3j,BlockchainManager.getCredentialsFromPrivateKey(),BlockchainManager.getADDRESSBOOK(),jsonObj.toString(), BigInteger.valueOf((long)wei));
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String address = BlockchainManager.deployDeal(web3j,BlockchainManager.getCredentialsFromPrivateKey(  sharedPreferences.getString("privatekey", "")),BlockchainManager.getADDRESSBOOK(),jsonObj.toString(), BigInteger.valueOf((long)wei));
             Toast.makeText(getApplicationContext(),"Your Offer is at Block" + address,Toast.LENGTH_LONG).show();
             db.addOffer(address);
             Log.i("JSON",address);
@@ -228,7 +231,8 @@ public class PlaceOrder extends AppCompatActivity {
             wei = wei * 1000000000;
             Log.i("JSON",String.valueOf(wei));
             Log.i("JSON",jsonObj.toString());
-            String address = BlockchainManager.deployDeal(web3j,BlockchainManager.getCredentialsFromPrivateKey(),BlockchainManager.getADDRESSBOOK(),jsonObj.toString(), BigInteger.valueOf((long)wei));
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            String address = BlockchainManager.deployDeal(web3j,BlockchainManager.getCredentialsFromPrivateKey(sharedPreferences.getString("privatekey", "")),BlockchainManager.getADDRESSBOOK(),jsonObj.toString(), BigInteger.valueOf((long)wei));
             Toast.makeText(getApplicationContext(),"Your Offer is at Block" + address,Toast.LENGTH_LONG).show();
             db.addRequest(address);
             Log.i("JSON",address);

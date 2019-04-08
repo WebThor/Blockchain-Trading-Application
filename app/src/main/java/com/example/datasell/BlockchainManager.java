@@ -25,7 +25,7 @@ public  class BlockchainManager  {
     protected final static BigInteger GAS_LIMIT = BigInteger.valueOf(6721975L);
     protected final static BigInteger GAS_PRICE = BigInteger.valueOf(20000000000L);
 
-    private final static String ADDRESSBOOK = "0x0dc778b72ef64bd476f3c43111ba2129a6908814";
+    private final static String ADDRESSBOOK = "0x97ff189359c24ebb0ceeaf6a44534c6c6fdbd4a9";
 
 
     public static String getADDRESSBOOK() {
@@ -35,17 +35,17 @@ public  class BlockchainManager  {
 
 
 
-    protected static  Credentials getCredentialsFromPrivateKey(){
-        return Credentials.create("ecf02ad755aa0f207d922d6b11560044e6a1dc3663615381065c7a1f9230bb29");
+    protected static  Credentials getCredentialsFromPrivateKey(String s){
+        return Credentials.create(s);
     }
 
     protected static Credentials getBuyerCredentials(){
         //return Credentials.create("d32083a9caf922a7b8e8843b4cb1a23729d7fbea43dd9597c7766b17f6d45ef1");
-        return Credentials.create("ecf02ad755aa0f207d922d6b11560044e6a1dc3663615381065c7a1f9230bb29");
+        return Credentials.create("ffdf94bf708583ec9db28e51b176972d8fdc1c6661a3e0cb6e1f5917ccc20b86");
     }
 
     protected static String getMyAddress(){
-        return "0x6a2138e87ca3291f57f2b21a455b426b6390017b";
+        return "0xEbA38dE3F7E3E9712a6eAAF75D41d5A48E51B45C";
     }
 
     protected static Web3j connectToEthereumTestnet(String url){
@@ -100,6 +100,26 @@ public  class BlockchainManager  {
         }
         return list;
     }
+
+
+    protected static boolean isEmptyBuyer(String address){
+        if(address.equals("0x0000000000000000000000000000000000000000")){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    protected static String getAllowedBuyer(Deal deal){
+        String buyer = "0x0000000000000000000000000000000000000000";
+        try {
+            buyer = deal.getAllowedBuyer().sendAsync().get();
+        }catch (Exception e){
+            Log.i("ErrorLog",e.getMessage());
+        }
+        return buyer;
+    }
+
 
     protected static String getBuyerOfContract(Deal deal){
         String buyer = "0x0000000000000000000000000000000000000000";

@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".GPS_Service_Package.App"
@@ -19,7 +21,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MyPurchases"></activity>
+        <activity android:name=".QR_Scanner"></activity>
+        <activity android:name=".MyPurchases" />
         <activity android:name=".MyBids" />
         <activity android:name=".OfferDetailView" />
         <activity android:name=".Bids" />
@@ -46,7 +49,6 @@
                 android:value="com.example.datasell.MainActivity" />
         </activity>
         <activity android:name=".DataStore" />
-        <activity android:name=".History" />
         <activity android:name=".OfferDetails" />
         <activity android:name=".MyOffers" />
         <activity android:name=".NewOffer" />

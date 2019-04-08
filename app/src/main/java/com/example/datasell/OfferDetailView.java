@@ -1,6 +1,8 @@
 package com.example.datasell;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -76,7 +78,8 @@ public class OfferDetailView extends AppCompatActivity {
 
     public void onAcceptOffer(View v){
         Web3j web3j = BlockchainManager.connectToEthereumTestnet(uri);
-        Deal deal = BlockchainManager.loadDeal(contractAddress,web3j,BlockchainManager.getCredentialsFromPrivateKey());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Deal deal = BlockchainManager.loadDeal(contractAddress,web3j,BlockchainManager.getCredentialsFromPrivateKey(sharedPreferences.getString("privatekey", "")));
         BlockchainManager.setAllowedBidder(buyerAddress,deal);
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         i.putExtra("blockchainURI",uri);

@@ -1,6 +1,8 @@
 package com.example.datasell;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,7 +49,9 @@ public class MyOffers extends AppCompatActivity {
 
     public void getOffers(List<String> addresses){
         LinearLayout ll = (LinearLayout) findViewById(R.id.myOffersLinearLayout);
-        Credentials creds = BlockchainManager.getCredentialsFromPrivateKey();
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Credentials creds = BlockchainManager.getCredentialsFromPrivateKey(sharedPreferences.getString("privatekey", "")  );
         ll.removeAllViews();
         for (String s : addresses){
 

@@ -13,67 +13,86 @@
     tools:context=".ConnectionActivity">
 
 
+    <LinearLayout
+        android:id="@+id/email_login_form"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/ipAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="Address"
+                android:inputType="textUri"
+                android:text="@string/default_IP" />
 
-        <LinearLayout
-            android:id="@+id/email_login_form"
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/port"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="Port"
+                android:inputType="numberDecimal"
+                android:text="@string/default_Port" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            android:id="@+id/deafultAddressbookDropdown"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:gravity="left"
+            android:hint="Addressbook"
+            android:textColorHint="#CFD8DC"
+            app:met_floatingLabel="normal" />
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/ipAddress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="Address"
-                    android:inputType="textUri"
-                    android:text="@string/default_IP" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/port"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:hint="Port"
-                    android:inputType="numberDecimal"
-                    android:text="@string/default_Port" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
-                android:id="@+id/deafultAddressbookDropdown"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Addressbook"
-                app:met_floatingLabel="normal"
-                android:textColorHint="#CFD8DC"
-                android:gravity="left" />
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            android:id="@+id/deafultKeyDropdown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:hint="Key"
+            android:textColorHint="#CFD8DC"
+            app:met_floatingLabel="normal" />
 
 
-            <Button
-                android:id="@+id/connectButton"
-                style="?android:textAppearanceSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Connect"
-                android:textStyle="bold"
-                android:background="@drawable/mybutton"
-                android:textColor="#ffffff"/>
-        </LinearLayout>
+        <Button
+            android:id="@+id/connectButton"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/mybutton"
+            android:text="Connect"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/qrButton"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/mybutton"
+            android:onClick="onScanQR"
+            android:text="SCAN QR"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
+    </LinearLayout>
+
 
 </LinearLayout>

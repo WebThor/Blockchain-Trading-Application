@@ -1,7 +1,10 @@
 package com.example.datasell;
 
 
+
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,8 +12,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
+
 import android.widget.TextView;
+
 
 import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
@@ -18,17 +22,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 /**
  * A login screen that offers login via email/password.
  */
-public class ConnectionActivity extends AppCompatActivity  {
+public class ConnectionActivity extends AppCompatActivity {
 
 
     // UI references.
     private TextView ipAddress;
     private TextView port;
     private MaterialBetterSpinner dropdownAddressbook;
+    private MaterialBetterSpinner dropDownKey;
 
 
     @Override
@@ -39,9 +43,20 @@ public class ConnectionActivity extends AppCompatActivity  {
         ipAddress = (TextView) findViewById(R.id.ipAddress);
         port = (TextView) findViewById(R.id.port);
         dropdownAddressbook = (MaterialBetterSpinner) findViewById(R.id.deafultAddressbookDropdown);
+        dropDownKey = (MaterialBetterSpinner) findViewById(R.id.deafultKeyDropdown);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
 
         List<String> list = new ArrayList<String>();
         list.add("0xdF83faa4c680410964FFB03272a5A8D6f7F8b8BE");
+
+        List<String> keys = new ArrayList<String>();
+        keys.add(sharedPreferences.getString("privatekey",""));
+
+
+        ArrayAdapter<String> valueAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item,keys);
+        dropDownKey.setAdapter(valueAdapter);
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
@@ -58,9 +73,8 @@ public class ConnectionActivity extends AppCompatActivity  {
     }
 
 
-
     private void attemptLogin() {
-               // Reset errors.
+        // Reset errors.
         ipAddress.setError(null);
         port.setError(null);
 
@@ -88,19 +102,22 @@ public class ConnectionActivity extends AppCompatActivity  {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
-        }else{
+        } else {
             String uri = ip + ":" + portValue;
-            Log.i("connectionLog_BM",uri);
+            Log.i("connectionLog_BM", uri);
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("blockchainURI", uri);
             startActivity(intent);
 
         }
-
-
-
     }
 
 
+
+
+    public void onScanQR(View v) {
+        Intent intent = new Intent(getApplicationContext(),QR_Scanner.class);
+        startActivity(intent);
+    }
 }
 

@@ -1,7 +1,9 @@
 package com.example.datasell;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -92,7 +94,8 @@ public class MainActivity extends AppCompatActivity
 
         LinearLayout llOffer = (LinearLayout) findViewById(R.id.offerLinearLayout);
         LinearLayout llRequest = (LinearLayout) findViewById(R.id.requestLinearLayout);
-        Credentials creds = BlockchainManager.getCredentialsFromPrivateKey();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        Credentials creds = BlockchainManager.getCredentialsFromPrivateKey(sharedPreferences.getString("privatekey", ""));
         List<String> addresses = BlockchainManager.getAddressesFromAddressbook(BlockchainManager.loadDefaultAddressbook(web3j,creds));
         llOffer.removeAllViews();
         llRequest.removeAllViews();
@@ -266,7 +269,8 @@ public class MainActivity extends AppCompatActivity
 
     public void getOffers(){
         LinearLayout ll = (LinearLayout) findViewById(R.id.offerLinearLayout);
-        List<String> addresses = BlockchainManager.getAddressesFromAddressbook(BlockchainManager.loadDefaultAddressbook(web3j,BlockchainManager.getCredentialsFromPrivateKey()));
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        List<String> addresses = BlockchainManager.getAddressesFromAddressbook(BlockchainManager.loadDefaultAddressbook(web3j,BlockchainManager.getCredentialsFromPrivateKey(sharedPreferences.getString("privatekey", ""))));
         Log.i("blockchain_call",addresses.toString());
         ll.removeAllViews();
         for (String s : addresses){

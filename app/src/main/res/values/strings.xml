@@ -93,6 +93,6 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="default_IP">http:\\192.168.2.88</string>
+    <string name="default_IP">http:\\\\192.168.2.88</string>
     <string name="default_Port">8545</string>
 </resources>
